@@ -1,0 +1,37 @@
+import 'package:auto/constants/colors.dart';
+import 'package:auto/constants/text.dart';
+import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+class CustomBtn extends StatelessWidget {
+  final String text;
+  final Function()? onPressed;
+  const CustomBtn({super.key, required this.text, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: green,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: InkWell(
+        onTap: onPressed,
+        child: Container(
+          height: 60,
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.w500,
+                fontFamily: font1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ).pOnly(left: 30, right: 30);
+  }
+}
