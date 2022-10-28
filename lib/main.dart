@@ -1,4 +1,5 @@
 import 'package:auto/screens/splash/splash.dart';
+import 'package:auto/screens/testScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +39,8 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: const SplashScreen(),
-        // home: const MasterScreen(),
+        // home: const SplashScreen(),
+        home: const TestScreen(),
       ),
     );
   }
