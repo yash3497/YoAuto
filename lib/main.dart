@@ -1,9 +1,9 @@
-import 'package:auto/screens/splash/splash.dart';
+// import 'package:auto/screens/splash/splash.dart';
 import 'package:auto/screens/testScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import './screens/Location/Yoautolocator.dart';
 import 'blocs/bloc.dart';
 
 void main() {
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => NavigationCubit()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Yo Auto',
         theme: ThemeData(
           // This is the theme of your application.
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: const SplashScreen(),
-        home: const TestScreen(),
+        home: const Locator(),
       ),
     );
   }
