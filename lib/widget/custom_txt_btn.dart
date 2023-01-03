@@ -26,14 +26,16 @@ class CustomTxtBtn extends StatelessWidget {
         onTap: onTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               icon,
-              size: 26,
+              size: 24,
             ),
             2.widthBox,
             Text(
               text,
+              overflow: TextOverflow.ellipsis,
               style: text4style,
             ),
           ],

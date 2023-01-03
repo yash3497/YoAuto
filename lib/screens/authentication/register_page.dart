@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:yoauto_task/backend/authentication/authManager.dart';
 import 'package:yoauto_task/constants/constant.dart';
 import '/widget/widget.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   CustomBtn(
                     text: 'Register',
                     onPressed: () {
-                      Fluttertoast.showToast(msg: 'Register');
+                      AuthManager().createUserWithEmail(
+                          emailController.text, passwordController.text);
                     },
                   ),
                   30.heightBox,
