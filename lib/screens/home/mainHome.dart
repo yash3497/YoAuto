@@ -14,6 +14,8 @@ class HomeScreenTwo extends StatefulWidget {
 }
 
 class _HomeScreenTwoState extends State<HomeScreenTwo> {
+  PageController _pageController = PageController();
+
   int _selectedIndex = 0;
 
   List<Widget> _widgets = [
@@ -49,7 +51,10 @@ class _HomeScreenTwoState extends State<HomeScreenTwo> {
         elevation: 30,
         child: CustomDrawerScreen(),
       ),
-      body: _widgets.elementAt(_selectedIndex),
+      body: PageView(
+        controller: _pageController,
+        children: _widgets,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

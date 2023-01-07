@@ -21,65 +21,61 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * .7,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(
-                    Icons.arrow_back_rounded,
-                    size: 28,
-                  ).onInkTap(() {
-                    Navigator.pop(context);
-                  }),
-                  Text(
-                    'Verify Phone',
-                    style: text5style,
-                  ),
-                ],
-              ),
-            ).pOnly(left: 30, right: 30),
-            40.heightBox,
-            Center(
-              child: Text(
-                'OTP is send to +91 ${widget.number}',
-                style: text2style(color: Colors.black),
-              ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * .7,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(
+                  Icons.arrow_back_rounded,
+                  size: 28,
+                ).onInkTap(() {
+                  Navigator.pop(context);
+                }),
+                Text(
+                  'Verify Phone',
+                  style: text5style,
+                ),
+              ],
             ),
-            30.heightBox,
-            CustomOtpBox(otp: otpController).pOnly(left: 30, right: 30),
-            const Spacer(),
-            Center(
-              child: Row(
-                children: [
-                  Text(
-                    "Didn't receive OTP?",
-                    style:
-                        text2style(color: hintColor, weight: FontWeight.w400),
-                  ),
-                  Text(
-                    " Request again",
-                    style: text2style(color: green, weight: FontWeight.w600),
-                  ).onInkTap(() {}),
-                ],
-              ).pOnly(left: 30, right: 0),
+          ).pOnly(left: 30, right: 30),
+          40.heightBox,
+          Center(
+            child: Text(
+              'OTP is send to +91 ${widget.number}',
+              style: text2style(color: Colors.black),
             ),
-            20.heightBox,
-            CustomBtn(
-              text: 'Verify & Login',
-              onPressed: () {
-                AuthManager().verifyOTP(otpController.text, context);
-              },
-            ),
-            60.heightBox,
-          ],
-        ).pOnly(top: 50, left: 0, right: 0),
-      ),
+          ),
+          30.heightBox,
+          CustomOtpBox(otp: otpController).pOnly(left: 30, right: 30),
+          const Spacer(),
+          Center(
+            child: Row(
+              children: [
+                Text(
+                  "Didn't receive OTP?",
+                  style: text2style(color: hintColor, weight: FontWeight.w400),
+                ),
+                Text(
+                  " Request again",
+                  style: text2style(color: green, weight: FontWeight.w600),
+                ).onInkTap(() {}),
+              ],
+            ).pOnly(left: 30, right: 0),
+          ),
+          20.heightBox,
+          CustomBtn(
+            text: 'Verify & Login',
+            onPressed: () {
+              AuthManager().verifyOTP(otpController.text, context);
+            },
+          ),
+          60.heightBox,
+        ],
+      ).pOnly(top: 50, left: 0, right: 0),
     );
   }
 }
