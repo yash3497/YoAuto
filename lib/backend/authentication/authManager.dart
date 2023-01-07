@@ -65,12 +65,13 @@ class AuthManager {
   }
 
   //---------Verify OTP-------------//
-  Future<void> verifyOTP(String otp) async {
+  Future<void> verifyOTP(String otp, BuildContext context) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: PhoneLoginPage.verify, smsCode: otp);
       await _auth.signInWithCredential(credential);
-      Get.to(HomeScreenTwo());
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => LoginPage())));
       Fluttertoast.showToast(msg: "Welcome to YOAUTO");
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: e.message.toString());

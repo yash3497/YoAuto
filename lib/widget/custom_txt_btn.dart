@@ -4,9 +4,14 @@ import 'package:yoauto_task/constants/text.dart';
 
 class CustomTxtBtn extends StatelessWidget {
   const CustomTxtBtn(
-      {super.key, required this.text, required this.icon, this.onTap});
+      {super.key,
+      required this.text,
+      required this.icon,
+      this.onTap,
+      this.style});
   final String text;
   final IconData icon;
+  final TextStyle? style;
   final Function()? onTap;
 
   @override
@@ -36,7 +41,7 @@ class CustomTxtBtn extends StatelessWidget {
             Text(
               text,
               overflow: TextOverflow.ellipsis,
-              style: text4style,
+              style: style ?? text4style,
             ),
           ],
         ),

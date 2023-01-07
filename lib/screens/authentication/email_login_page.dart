@@ -102,6 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                   CustomTxtBtn(
                     text: "Login with Phone number",
                     icon: Icons.phone_android,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                     onTap: () {
                       Get.to(PhoneLoginPage());
                     },
