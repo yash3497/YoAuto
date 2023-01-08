@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoauto_task/my_ride.dart';
 import 'package:yoauto_task/screens/authentication/email_login_page.dart';
 import 'package:yoauto_task/screens/profile/profileScreen.dart';
@@ -20,6 +21,22 @@ class CustomDrawerScreen extends StatefulWidget {
 }
 
 class _CustomDrawerScreenState extends State<CustomDrawerScreen> {
+  String? phone;
+
+  Future<void> getUserDetails() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      phone = _prefs.getString('phone');
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserDetails();
+  }
+
   List<Widget> icons = [
     Image.asset("assets/images/Time_light.png"),
     Image.asset("assets/images/GIft.png"),
@@ -81,7 +98,7 @@ class _CustomDrawerScreenState extends State<CustomDrawerScreen> {
                 ),
               ),
               subtitle: Text(
-                "+XX XXXXXXXXX",
+                phone ?? "+XX XXXXXXXXX",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

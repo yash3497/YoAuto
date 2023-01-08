@@ -1,8 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoauto_task/backend/authentication/authManager.dart';
+import 'package:yoauto_task/screens/home/mainScreen.dart';
 
 import '../authentication/email_login_page.dart';
 import 'editableTextField.dart';
@@ -22,6 +27,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _dob = TextEditingController(text: "XX/XX/XXXX");
   TextEditingController _gender = TextEditingController(text: "Male");
   bool isEnable = true;
+
+  String? phone;
+
+  Future<void> getUserDetails() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      phone = _prefs.getString('phone');
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +66,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(MainScreen());
+                            },
                             icon: const Icon(
                               Icons.arrow_back,
                               size: 32,
@@ -75,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     //---------------------------------------------//
                     //------UserName-------//
-                    const Align(
+                    Align(
                       alignment: Alignment.bottomLeft,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
@@ -87,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           //------Phone-No-----//
                           subtitle: Text(
-                            "+xxxxxxxxx",
+                            phone ?? "+xxxxxxxxx",
                             style: TextStyle(fontSize: 22, color: Colors.green),
                           ),
                         ),
@@ -174,7 +197,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: height / 10,
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        await AuthManager().updateUserDetails(_address.text,
+                            _email.text, _dob.text, _gender.text);
                         setState(() {
                           isEnable = !isEnable;
                         });

@@ -2,10 +2,12 @@
 
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoauto_task/screens/authentication/email_login_page.dart';
 import 'package:yoauto_task/screens/authentication/otp_screen.dart';
 import 'package:yoauto_task/screens/authentication/phone_login_page.dart';
@@ -61,6 +63,15 @@ class AuthManager {
           },
           codeAutoRetrievalTimeout: (String verificationId) {});
 
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Users');
+      String? uid = _auth.currentUser?.uid.toString();
+      users.add({"phoneNo": phone, "uid": uid});
+
+      //------Save user details locally--------//
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      _prefs.setString('phone', phone);
+
       // User is signed in.
     } on FirebaseAuthException catch (e) {
       // An error occurred.
@@ -81,5 +92,19 @@ class AuthManager {
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: e.message.toString());
     }
+  }
+
+  Future<void> updateUserDetails(
+      String address, String email, String dob, String gender) async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    final users = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(_auth.currentUser?.uid)
+        .set({
+      "Address": address,
+      "Email": email,
+      "D.O.B": dob,
+      "Gender": gender
+    });
   }
 }
