@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:yoauto_task/backend/authentication/authManager.dart';
 import 'package:yoauto_task/constants/constant.dart';
 import 'package:yoauto_task/screens/home/mainHome.dart';
-import '../home/home_screen.dart';
+import '../home/book_ride_screen.dart';
 import '/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';

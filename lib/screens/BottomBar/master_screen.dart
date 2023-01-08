@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yoauto_task/screens/home/mainHome.dart';
+import 'package:yoauto_task/screens/home/mainScreen.dart';
 
 import '../../blocs/bloc.dart';
 
 import '../../constants/nav_bar_items.dart';
 import '../../constants/text.dart';
 import '../CurrentRide/current_ride.dart';
-import '../home/home_screen.dart';
+import '../home/book_ride_screen.dart';
 import '../wallet/wallet_screen.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -72,7 +74,7 @@ class _MasterScreenState extends State<MasterScreen> {
       body: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {
           if (state.navbarItem == NavBarItem.home) {
-            return const HomeScreen();
+            return MainScreen();
           }
           if (state.navbarItem == NavBarItem.currentRide) {
             return const CurrentRideScreen();

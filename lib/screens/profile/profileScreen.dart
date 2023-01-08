@@ -1,7 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_final_fields, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../authentication/email_login_page.dart';
 import 'editableTextField.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -128,30 +131,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Visibility(
                 visible: isEnable,
-                child: Container(
-                    height: height / 12,
-                    width: width,
-                    color: Colors.amber,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.logout_outlined,
-                            size: 28,
-                            color: Colors.green,
-                          ),
-                          SizedBox(
-                            width: width / 20,
-                          ),
-                          Text(
-                            "Logout",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    )),
+                child: InkWell(
+                  onTap: (() async {
+                    FirebaseAuth _auth = FirebaseAuth.instance;
+                    await _auth.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: ((context) => LoginPage())));
+                    Fluttertoast.showToast(msg: "Logged Out, See You Soon :)");
+                  }),
+                  child: Container(
+                      height: height / 12,
+                      width: width,
+                      color: Colors.amber,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.logout_outlined,
+                              size: 28,
+                              color: Colors.green,
+                            ),
+                            SizedBox(
+                              width: width / 20,
+                            ),
+                            Text(
+                              "Logout",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
               ),
               //------------Save-Button--------------//
               Visibility(

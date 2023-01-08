@@ -8,28 +8,12 @@ import 'package:yoauto_task/widget/widget.dart';
 
 import '../../widget/custom_drawerScreen.dart';
 
-class HomeScreenTwo extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _HomeScreenTwoState createState() => _HomeScreenTwoState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenTwoState extends State<HomeScreenTwo> {
-  PageController _pageController = PageController();
-
-  int _selectedIndex = 0;
-
-  List<Widget> _widgets = [
-    HomeContainer(),
-    CurrentRideScreen(),
-    WalletScreen()
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -51,35 +35,34 @@ class _HomeScreenTwoState extends State<HomeScreenTwo> {
         elevation: 30,
         child: CustomDrawerScreen(),
       ),
-      body: PageView(
-        controller: _pageController,
-        children: _widgets,
+      body: SingleChildScrollView(
+        child: HomeContainer(),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, size: 45, color: Colors.black87),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.location_on_outlined,
-                size: 45,
-                color: Colors.black87,
-              ),
-              label: "Current Ride"),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.wallet,
-                size: 45,
-                color: Colors.black87,
-              ),
-              label: "Wallet"),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black12,
-        onTap: _onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home_outlined, size: 45, color: Colors.black87),
+      //       label: "Home",
+      //     ),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(
+      //           Icons.location_on_outlined,
+      //           size: 45,
+      //           color: Colors.black87,
+      //         ),
+      //         label: "Current Ride"),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(
+      //           Icons.wallet,
+      //           size: 45,
+      //           color: Colors.black87,
+      //         ),
+      //         label: "Wallet"),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Colors.black12,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 }

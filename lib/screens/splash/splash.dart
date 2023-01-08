@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:yoauto_task/screens/home/mainHome.dart';
+import 'package:yoauto_task/screens/home/mainScreen.dart';
 
 import '../authentication/email_login_page.dart';
 import '../authentication/register_page.dart';
@@ -26,8 +27,8 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     } else {
       await Future.delayed(const Duration(seconds: 3), () {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: ((context) => HomeScreenTwo())));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => MainScreen())));
         Fluttertoast.showToast(msg: "Welcome, You already logged In !");
       });
     }

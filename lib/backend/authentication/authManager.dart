@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:yoauto_task/screens/authentication/email_login_page.dart';
 import 'package:yoauto_task/screens/authentication/otp_screen.dart';
 import 'package:yoauto_task/screens/authentication/phone_login_page.dart';
+import 'package:yoauto_task/screens/home/mainScreen.dart';
 
 import '../../screens/home/mainHome.dart';
 
@@ -23,7 +24,7 @@ class AuthManager {
       Fluttertoast.showToast(msg: "Welcome");
 
       // User is signed in.
-      Get.to(HomeScreenTwo());
+      Get.to(MainScreen());
     } on FirebaseAuthException catch (e) {
       // An error occurred.
       Fluttertoast.showToast(
@@ -75,7 +76,7 @@ class AuthManager {
           verificationId: PhoneLoginPage.verify, smsCode: otp);
       await _auth.signInWithCredential(credential);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => HomeScreenTwo())));
+          context, MaterialPageRoute(builder: ((context) => MainScreen())));
       Fluttertoast.showToast(msg: "Welcome to YOAUTO");
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: e.message.toString());

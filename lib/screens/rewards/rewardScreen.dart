@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yoauto_task/screens/home/mainScreen.dart';
 
 import '../../widget/custom_tile_card.dart';
-import '../home/home_screen.dart';
+import '../home/book_ride_screen.dart';
 
 class RewardScreen extends StatefulWidget {
   RewardScreen({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _RewardScreenState extends State<RewardScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
                           onPressed: () {
-                            Get.to(HomeScreen());
+                            Get.to(MainScreen());
                           },
                           icon: Icon(
                             Icons.arrow_back,

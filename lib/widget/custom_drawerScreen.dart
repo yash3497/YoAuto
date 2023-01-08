@@ -1,8 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:yoauto_task/my_ride.dart';
+import 'package:yoauto_task/screens/authentication/email_login_page.dart';
+import 'package:yoauto_task/screens/profile/profileScreen.dart';
 import 'package:yoauto_task/screens/rewards/ref_earn_Screen.dart';
 import 'package:yoauto_task/screens/rewards/rewardScreen.dart';
 import 'package:yoauto_task/screens/testScreen.dart';
@@ -52,14 +56,19 @@ class _CustomDrawerScreenState extends State<CustomDrawerScreen> {
           color: Colors.amber,
           child: Center(
             child: ListTile(
-              leading: CircleAvatar(
-                radius: 35,
-                backgroundColor: Colors.white,
-                child: Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 36,
-                    color: Colors.green,
+              leading: InkWell(
+                onTap: (() {
+                  Get.to(ProfileScreen());
+                }),
+                child: CircleAvatar(
+                  radius: 35,
+                  backgroundColor: Colors.white,
+                  child: Center(
+                    child: Icon(
+                      Icons.person,
+                      size: 36,
+                      color: Colors.green,
+                    ),
                   ),
                 ),
               ),

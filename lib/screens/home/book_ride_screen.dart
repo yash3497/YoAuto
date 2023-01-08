@@ -9,16 +9,16 @@ import 'package:velocity_x/velocity_x.dart';
 
 import 'bottomsheet/detailedBottomSheet.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class BookRideScreen extends StatefulWidget {
+  const BookRideScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<BookRideScreen> createState() => _BookRideScreenState();
 }
 
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class _HomeScreenState extends State<HomeScreen> {
+class _BookRideScreenState extends State<BookRideScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
