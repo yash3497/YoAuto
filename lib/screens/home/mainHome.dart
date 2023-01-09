@@ -67,11 +67,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeContainer extends StatelessWidget {
-  const HomeContainer({super.key});
+
+class HomeContainer extends StatefulWidget {
+  const HomeContainer({Key? key}) : super(key: key);
 
   @override
+  State<HomeContainer> createState() => _HomeContainerState();
+}
+
+class _HomeContainerState extends State<HomeContainer> {
+  @override
   Widget build(BuildContext context) {
+    TextEditingController startLocation = TextEditingController();
+    TextEditingController endLocation = TextEditingController();
+
     return Container(
       margin: EdgeInsets.all(20),
       height: 200,
@@ -85,7 +94,7 @@ class HomeContainer extends StatelessWidget {
           children: [
             Container(
               height: 50,
-              width: 300,
+              width: 320,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(35),
                   boxShadow: [
@@ -106,16 +115,29 @@ class HomeContainer extends StatelessWidget {
                       color: Colors.green,
                       shape: BoxShape.circle,
                     ),
+
                   ),
-                  Text(
-                    'XYZ Road, Ranchi Univer',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  Container(
+                    width: 180,
+                    child:  TextField(
+
+                      controller: startLocation,
+                      decoration: InputDecoration(
+                          hintText: "Enter Your Location" ,
+                          border: InputBorder.none
+
+
+                      ),
+
+
+                    ),
                   ),
-                  SizedBox(width: 8),
-                  Icon(
-                    Icons.mic,
-                    size: 30,
-                    color: Colors.green,
+
+
+                  IconButton(
+                    onPressed: (){},
+                    icon:  Icon(Icons.mic,size: 30,
+                      color: Colors.green,),
                   )
                 ],
               ),
@@ -125,7 +147,7 @@ class HomeContainer extends StatelessWidget {
             ),
             Container(
               height: 50,
-              width: 300,
+              width: 320,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(35),
                   boxShadow: [
@@ -147,19 +169,29 @@ class HomeContainer extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  Text(
-                    'Enter Destination',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: 17),
+
+                  Container(
+                    width: 180,
+                    child:  TextField(
+                      controller: endLocation,
+                      decoration: InputDecoration(
+                          hintText: "Enter Your Destination" ,
+
+                          border: InputBorder.none
+                      ),
+
+
+
+                    ),
                   ),
-                  SizedBox(width: 8),
-                  Icon(
-                    Icons.mic,
-                    size: 30,
-                    color: Colors.yellow[600],
-                  )
+
+                  IconButton(
+                      onPressed: (){
+
+                      },
+                      icon: Icon( Icons.mic,
+                          size: 30,
+                          color: Colors.yellow[600]))
                 ],
               ),
             )
@@ -169,3 +201,4 @@ class HomeContainer extends StatelessWidget {
     );
   }
 }
+
