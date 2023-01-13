@@ -37,6 +37,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  //-----Logout------//
+  Future<void> logout() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.clear();
+
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    await _auth.signOut();
+
+    Navigator.pop(context, true);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: ((context) => LoginPage())));
+    Fluttertoast.showToast(msg: "Logged Out, See You Soon :)");
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -155,13 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Visibility(
                 visible: isEnable,
                 child: InkWell(
-                  onTap: (() async {
-                    FirebaseAuth _auth = FirebaseAuth.instance;
-                    await _auth.signOut();
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: ((context) => LoginPage())));
-                    Fluttertoast.showToast(msg: "Logged Out, See You Soon :)");
-                  }),
+                  onTap: logout,
                   child: Container(
                       height: height / 12,
                       width: width,

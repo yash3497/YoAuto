@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:yoauto_task/backend/services/locationServices.dart';
 import 'package:yoauto_task/my_ride.dart';
 import 'package:yoauto_task/screens/CurrentRide/current_ride.dart';
 import 'package:yoauto_task/screens/home/book_ride_screen.dart';
@@ -27,6 +28,13 @@ class _MainScreenState extends State<MainScreen> {
           duration: Duration(milliseconds: 500),
           curve: Curves.fastLinearToSlowEaseIn);
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    LocationServices.checkServiceAndPermission();
   }
 
   @override
