@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:yoauto_task/backend/services/locationServices.dart';
 import 'package:yoauto_task/screens/home/mainHome.dart';
 import 'package:yoauto_task/screens/home/mainScreen.dart';
 
@@ -41,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
     _pageDecider();
+    LocationServices.checkServiceAndPermission();
   }
 
   @override

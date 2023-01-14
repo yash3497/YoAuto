@@ -1,15 +1,20 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationServices {
   //-------Get User Current Location---------------//
-  void getUserLocation() async {
+  Future<Position?> getUserLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     double lat = position.latitude;
     double lng = position.longitude;
+
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setDouble('lat', lat);
+    _prefs.setDouble('lng', lng);
 
     Fluttertoast.showToast(
         msg: "Lattitude : " + "$lat" + "\nLongitude : " + "$lng");

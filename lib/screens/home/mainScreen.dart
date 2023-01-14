@@ -31,13 +31,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    LocationServices.checkServiceAndPermission();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
