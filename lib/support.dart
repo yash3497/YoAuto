@@ -59,13 +59,14 @@ class SupportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.to(MainScreen());
+         leading:IconButton(
+           padding: EdgeInsets.only(left: 15),
+          onPressed: (){
+
           },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+          icon: Icon(Icons.arrow_back,
+            color: Colors.black,size: 35,
+
           ),
         ),
         title: Text(
