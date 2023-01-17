@@ -167,8 +167,16 @@ class _WalletTransactionState extends State<WalletTransaction> {
       appBar: AppBar(
           backgroundColor: Color.fromRGBO(255, 203, 32, 1),
 
-         leading: Icon(Icons.arrow_back,
-         color: Colors.black,),
+           leading:IconButton(
+           padding: EdgeInsets.only(left: 15),
+          onPressed: (){
+
+          },
+          icon: Icon(Icons.arrow_back,
+            color: Colors.black,size: 35,
+
+          ),
+        ),
           title: Text("Wallet Transaction",
               style: TextStyle(
                 fontSize: 25,
