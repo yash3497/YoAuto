@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:yoauto_task/screens/authentication/phone_login_page.dart';
 import './screens/Location/Yoautolocator.dart';
 import 'blocs/bloc.dart';
 import 'screens/splash/splash.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.amber,
         ),
         // home: const SplashScreen(),
-        home: SplashScreen(),
+        home: PhoneLoginPage(),
       ),
     );
   }
