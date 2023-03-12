@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -20,6 +22,12 @@ class PhoneLoginPage extends StatefulWidget {
 class _PhoneLoginPageState extends State<PhoneLoginPage> {
   //controller
   final phoneController = TextEditingController();
+
+
+  //sign in With Google
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,11 +102,23 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                     ],
                   ).pOnly(left: 30, right: 30),
                   25.heightBox,
-                  CustomTxtBtn(
-                    text: "Login with TrueCaller",
-                    icon: Icons.phone,
-                    onTap: () {},
-                  ),
+
+                    // Google Sign In Option
+                  loading
+                      ? CircularProgressIndicator()
+                      : SignInButton(Buttons.GoogleDark,
+                      text: "Continue with Google", onPressed: () async {
+                        setState(() {
+                          loading = true;
+                        });
+                        await AuthManager().signInWithGoogle(context);
+
+                        setState(() {
+                          loading = false;
+                        });
+
+                      }),
+
                   90.heightBox,
                   const Divider(
                     color: darkGreen,

@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoauto_task/screens/authentication/email_login_page.dart';
 import 'package:yoauto_task/screens/authentication/otp_screen.dart';
@@ -107,4 +108,37 @@ class AuthManager {
       "Gender": gender
     });
   }
+
+
+  //---------Google Signing-------------//
+
+  Future <User?> signInWithGoogle (context) async{
+
+    try{
+
+      // trigger the Authentication dialog
+
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if(googleUser != null){
+        // obtain the auth details from the request
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        // create new Credential
+        final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken
+        );
+        //once signed in return the user data to firebase
+        UserCredential userCredential = await _auth.signInWithCredential(credential);
+
+        return userCredential.user;
+      }
+    }catch(e){
+      Fluttertoast.showToast(
+          msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+    }
+
+
+  }
+
+
 }
