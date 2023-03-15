@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:yoauto_task/backend/services/locationServices.dart';
 import 'package:yoauto_task/my_ride.dart';
 import 'package:yoauto_task/screens/CurrentRide/current_ride.dart';
@@ -46,36 +47,35 @@ class _MainScreenState extends State<MainScreen> {
           children: [HomeScreen(), MyRide(), WalletScreen()],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+      bottomNavigationBar: SalomonBottomBar(
+        unselectedItemColor: Colors.grey,
+        margin: EdgeInsets.all(5),
+        itemPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+        items: <SalomonBottomBarItem>[
+          SalomonBottomBarItem(
+            title: Text("Home"),
             icon: Icon(
               Icons.home_outlined,
               size: 36,
             ),
-            label: "Home",
           ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.history,
-                size: 36,
-              ),
-              label: "My Rides"),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.wallet,
-                size: 36,
-              ),
-              label: "Wallet"),
+          SalomonBottomBarItem(
+            title: Text("My Rides"),
+            icon: Icon(
+              Icons.history,
+              size: 36,
+            ),
+          ),
+          SalomonBottomBarItem(
+            title: Text("Wallet"),
+            icon: Icon(
+              Icons.wallet,
+              size: 36,
+            ),
+          ),
         ],
         currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle:
-            TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        showUnselectedLabels: false,
-        selectedIconTheme: IconThemeData(color: Colors.black),
-        unselectedItemColor: Colors.grey,
-        unselectedIconTheme: IconThemeData(color: Colors.grey),
+        selectedItemColor: Colors.green.shade800,
         onTap: bottomTapped,
       ),
     );

@@ -3,18 +3,26 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geocoder/geocoder.dart';
+import 'package:geocoder2/geocoder2.dart';
+
 import 'package:geolocator/geolocator.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:yoauto_task/backend/services/locationServices.dart';
 import 'package:yoauto_task/screens/CurrentRide/current_ride.dart';
+import 'package:yoauto_task/screens/home/book_ride_screen.dart';
+import 'package:yoauto_task/screens/home/map/mapScreen.dart';
+import 'package:yoauto_task/screens/home/search/pickupSearchScreen.dart';
 import 'package:yoauto_task/screens/wallet/wallet_screen.dart';
 import 'package:yoauto_task/widget/custom_drawer_btn.dart';
 import 'package:yoauto_task/widget/widget.dart';
 
 import '../../widget/custom_drawerScreen.dart';
+import 'bottomsheet/detailedBottomSheet.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({
@@ -25,37 +33,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? pickupStringValue;
+  String? dropStringValue;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //-----Google-Map-Configs------//
-  //----Controller-------//
-  Completer<GoogleMapController> _controller = Completer();
-// on below line we have specified camera position
-  static const CameraPosition _kGoogle = CameraPosition(
-    target: LatLng(30.316496, 78.032188),
-    zoom: 14.4746,
-  );
-
-// on below line we have created the list of markers
-  final List<Marker> _markers = <Marker>[
-    Marker(
-        markerId: MarkerId('1'),
-        position: LatLng(30.316496, 78.032188),
-        infoWindow: InfoWindow(
-          title: 'My Position',
-        )),
-  ];
-
-  Future<Position> getUserCurrentLocation() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) async {
-      await Geolocator.requestPermission();
-      print("ERROR" + error.toString());
+  getEnteredLocations() async {
+    var prefs = await SharedPreferences.getInstance();
+    var pickup = prefs.getString('pickupLocation');
+    var drop = prefs.getString('dropLocation');
+    setState(() {
+      pickupStringValue = pickup;
+      dropStringValue = drop;
     });
-    return await Geolocator.getCurrentPosition();
   }
-  //--------------------------------//
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getEnteredLocations();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,63 +82,91 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 30,
         child: CustomDrawerScreen(),
       ),
-      body: SafeArea(
-        child: Stack(children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            myLocationEnabled: true,
-            compassEnabled: true,
-            markers: Set<Marker>.of(_markers),
-            initialCameraPosition: _kGoogle,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-          HomeContainer()
-        ]),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          getUserCurrentLocation().then((value) async {
-            print(
-                value!.latitude.toString() + " " + value!.longitude.toString());
-            _markers.add(Marker(
-              markerId: MarkerId("2"),
-              position: LatLng(value.latitude, value.longitude),
-              infoWindow: InfoWindow(
-                title: 'My Current Location',
-              ),
-            ));
+      body: MapScreen(),
 
-            // specified current users location
-            CameraPosition cameraPosition = new CameraPosition(
-              target: LatLng(value.latitude, value.longitude),
-              zoom: 14,
-            );
-
-            //----------------------//
-            final GoogleMapController controller = await _controller.future;
-            controller
-                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-            final coordinates = Coordinates(value.latitude, value.longitude);
-            var address =
-                await Geocoder.local.findAddressesFromCoordinates(coordinates);
-            var first = address.first.addressLine;
-            SharedPreferences _prefs = await SharedPreferences.getInstance();
-            _prefs.setString('address', first);
-            Fluttertoast.showToast(msg: "$first");
-            setState(() {});
-          });
-        },
-        label: const Text('Locate Me!'),
-        icon: const Icon(Icons.directions_boat),
+      bottomSheet: Container(
+        height: context.screenHeight / 2.5,
+        width: context.screenWidth,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(18), topRight: Radius.circular(18))),
+        child: Column(
+          children: [
+            Text(
+              "Where To?",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ).pOnly(top: 30),
+            Container(
+              height: 60,
+              width: context.screenWidth / 1.2,
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(8)),
+              child: TextField(
+                autofocus: false,
+                onTap: (() {
+                  showSearch(
+                      context: context, delegate: PickupSearchDelegate());
+                }),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.location_pin),
+                    hintText: pickupStringValue ?? "Add a pickup location"),
+              ).pOnly(top: 5, right: 10),
+            ).pOnly(top: 30),
+            //------------Destination-Location-------------//
+            Container(
+              height: 60,
+              width: context.screenWidth / 1.2,
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(8)),
+              child: TextField(
+                onTap: () {
+                  showSearch(context: context, delegate: DropSearchDelegate());
+                },
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.pin_drop),
+                    hintText: dropStringValue ?? "Enter a drop location"),
+              ).pOnly(top: 5, right: 10),
+            ).pOnly(top: 30),
+            //------------Destination-Location-------------//
+            InkWell(
+              onTap: (() {
+                Get.to(BookRideScreen());
+              }),
+              child: Container(
+                  height: 60,
+                  width: context.screenWidth / 1.2,
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Center(
+                    child: Text(
+                      "Continue",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  )).pOnly(top: 30),
+            )
+          ],
+        ),
       ),
+
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () async {
+
+      // ),
     );
   }
 }
 
 class HomeContainer extends StatefulWidget {
-  const HomeContainer({Key? key}) : super(key: key);
+  String? address;
+  String? destination;
+  HomeContainer({Key? key, this.address, this.destination}) : super(key: key);
 
   @override
   State<HomeContainer> createState() => _HomeContainerState();
@@ -150,8 +175,10 @@ class HomeContainer extends StatefulWidget {
 class _HomeContainerState extends State<HomeContainer> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController startLocation = TextEditingController();
-    TextEditingController endLocation = TextEditingController();
+    TextEditingController startLocation =
+        TextEditingController(text: widget.address);
+    TextEditingController endLocation =
+        TextEditingController(text: widget.destination);
 
     return Align(
       alignment: Alignment.topCenter,
@@ -192,7 +219,7 @@ class _HomeContainerState extends State<HomeContainer> {
                     ),
                     Container(
                       width: 180,
-                      child: TextField(
+                      child: TextFormField(
                         controller: startLocation,
                         decoration: InputDecoration(
                             hintText: "Enter Your Location",
