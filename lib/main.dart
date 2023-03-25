@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:yoauto_task/ride_end_dialog.dart';
 import 'package:yoauto_task/screens/home/book_ride_screen.dart';
 import 'package:yoauto_task/screens/home/bottomsheet/detailedBottomSheet.dart';
+import 'package:yoauto_task/screens/profile/profileScreen.dart';
 import './screens/Location/Yoautolocator.dart';
 import 'blocs/bloc.dart';
 import 'screens/splash/splash.dart';
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.amber,
         ),
         // home: const SplashScreen(),
-        home: SplashScreen(),
+        home: DialogBox(),
       ),
     );
   }

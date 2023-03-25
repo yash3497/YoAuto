@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 
-void main (){
-  runApp(MaterialApp(
-    home: DialogBox(),
-  ));
-}
 
 class DialogBox extends StatelessWidget {
 
