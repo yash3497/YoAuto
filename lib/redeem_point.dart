@@ -39,7 +39,7 @@ class _RedeemPointState extends State<RedeemPoint> {
                width: double.infinity,
                child: Padding(
                  padding: const EdgeInsets.only(bottom: 15),
-                 child: Image.asset("lib/images/redeem.png",
+                 child: Image.asset("assets/images/redeem.png",
                     height: 200,
 
                   ),
