@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice_ex/directions.dart';
 import 'package:search_map_place_updated/search_map_place_updated.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: MapScreen(),
 
       bottomSheet: Container(
-        height: context.screenHeight / 2.5,
+        height: context.screenHeight / 2.8,
         width: context.screenWidth,
         decoration: BoxDecoration(
             color: Colors.white,
@@ -97,13 +98,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 topLeft: Radius.circular(18), topRight: Radius.circular(18))),
         child: Column(
           children: [
-            // SearchMapPlaceWidget(apiKey: mapApiKey),
+            SearchMapPlaceWidget(apiKey: mapApiKey),
             Text(
               "Where To?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ).pOnly(top: 30),
+            ).pOnly(top: 20),
             Container(
-              height: 60,
+              height: 50,
               width: context.screenWidth / 1.2,
               decoration: BoxDecoration(
                   color: Colors.grey.shade300,
@@ -128,10 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   )),
-            ).pOnly(top: 30),
+            ).pOnly(top: 20),
             //------------Destination-Location-------------//
             Container(
-                height: 60,
+                height: 50,
                 width: context.screenWidth / 1.2,
                 decoration: BoxDecoration(
                     color: Colors.grey.shade300,
@@ -161,8 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Get.to(BookRideScreen());
               }),
               child: Container(
-                  height: 60,
-                  width: context.screenWidth / 1.2,
+                  height: 50,
+                  width: context.screenWidth / 1.4,
                   decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(8)),
@@ -198,6 +199,35 @@ class HomeContainer extends StatefulWidget {
 class _HomeContainerState extends State<HomeContainer> {
   @override
   Widget build(BuildContext context) {
+    //----------------Day-Night-Checker-----------------//
+    // Get the current time
+    DateTime now = DateTime.now();
+
+// Define the start and end times for day and night
+    final startDayTime = TimeOfDay(hour: 6, minute: 0);
+    final endDayTime = TimeOfDay(hour: 18, minute: 0);
+
+// Convert the current time to a TimeOfDay object
+    TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
+
+// Convert the start and end times to DateTime objects
+    DateTime startDateTime = DateTime(
+        now.year, now.month, now.day, startDayTime.hour, startDayTime.minute);
+    DateTime endDateTime = DateTime(
+        now.year, now.month, now.day, endDayTime.hour, endDayTime.minute);
+
+// Convert the current time to a DateTime object
+    DateTime currentDateTime = DateTime(
+        now.year, now.month, now.day, currentTime.hour, currentTime.minute);
+
+// Check if the current time is within the day time range
+    bool isDayTime = currentDateTime.isAfter(startDateTime) &&
+        currentDateTime.isBefore(endDateTime);
+
+// Set the price based on whether it's day or night
+    double price = isDayTime ? 6.0 : 10.0;
+
+    //-------------------------------------------------//
     TextEditingController startLocation =
         TextEditingController(text: widget.address);
     TextEditingController endLocation =

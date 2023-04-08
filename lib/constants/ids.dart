@@ -5,4 +5,4 @@ String walletCoinAdID = 'ca-app-pub-1604403926008527/4572389927';
 String fullScreenAdID = 'ca-app-pub-1604403926008527/4015940438';
 
 //-----Map-Api-Key--------//
-String mapApiKey = 'AIzaSyBxtlkIeXhqLCmgHLS4wY_8avUz6K-SC-U';
+String mapApiKey = 'AIzaSyDJOZnNwA46ZH60yCn5fYncG7MIWYc6OYo';

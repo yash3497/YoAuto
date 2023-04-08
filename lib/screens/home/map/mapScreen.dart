@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice_ex/directions.dart' as webSr;
 import 'package:location/location.dart';
 import 'package:location_geocoder/location_geocoder.dart';
 import 'package:yoauto_task/constants/ids.dart';
@@ -24,8 +26,10 @@ class _MapScreenState extends State<MapScreen> {
   String? currentAddress;
   String? addr;
   var apiKey = mapApiKey;
-  Completer<GoogleMapController> _controller = Completer();
+  Completer<GoogleMapController> _controllerCompleter = Completer();
   final LocatitonGeocoder geocoder = LocatitonGeocoder(mapApiKey);
+  //-----Demo-Locations------//
+  // destination point
 
   //--------------Custom-Marker------------------//
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
@@ -49,14 +53,18 @@ class _MapScreenState extends State<MapScreen> {
 
   List<LatLng> polylineCoordinates = [];
   LocationData? currentLocation;
+  //-------Demo-Locations-----//
+
+  static const LatLng dest = LatLng(23.6913, 85.2722);
+  static const LatLng src = LatLng(19.0760, 72.8777);
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        apiKey,
-        PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-        PointLatLng(destination.latitude, destination.longitude));
+        mapApiKey,
+        PointLatLng(src.latitude, src.longitude),
+        PointLatLng(dest.latitude, dest.longitude));
 
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) =>
@@ -66,11 +74,24 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  //-----------Get-Dstance-Price-------//
+  final directions = webSr.GoogleMapsDirections(apiKey: mapApiKey);
+  // void getDistancePrice() async {
+  //   final result = await directions.directionsWithLocation(
+  //       webSr.Location(lat: src.latitude, lng: src.longitude),
+  //       webSr.Location(lat: dest.latitude, lng: dest.longitude));
+  //   final distanceInMeters = result.routes.first.legs.first.distance.value;
+  //   final distanceInKm = distanceInMeters / 1000;
+
+  //   print("Distance" + distanceInKm.toString());
+  // }
+
   //--------Init----------//
   @override
   void initState() {
+    // getDistancePrice();
     addCustomIcon();
-    getCurrentLocation(apiKey, addr, _controller);
+    getCurrentLocation(apiKey, addr, _controllerCompleter);
 
     print(currentLocation);
     getPolyPoints();
@@ -88,10 +109,12 @@ class _MapScreenState extends State<MapScreen> {
             child: Text("loading..."),
           )
         : GoogleMap(
+            buildingsEnabled: false,
             initialCameraPosition: CameraPosition(
-                target: LatLng(
-                    currentLocation!.latitude!, currentLocation!.longitude!),
-                zoom: 13.5),
+                target: LatLng(src.latitude, src.longitude),
+                // target: LatLng(
+                //     currentLocation!.latitude!, currentLocation!.longitude!),
+                zoom: 5),
             polylines: {
               Polyline(
                   polylineId: PolylineId('route'),
@@ -102,16 +125,21 @@ class _MapScreenState extends State<MapScreen> {
             markers: {
               Marker(
                   markerId: const MarkerId('currentLocation'),
-                  icon: markerIcon,
-                  position: LatLng(
-                      currentLocation!.latitude!, currentLocation!.longitude!)),
-              const Marker(
-                  markerId: MarkerId('source'), position: sourceLocation),
-              const Marker(
-                  markerId: MarkerId('destination'), position: destination)
+                  infoWindow: InfoWindow(
+                      title: "You", snippet: "this is your current location"),
+                  position: LatLng(src.latitude, src.longitude)),
+              // position: LatLng(
+              //     currentLocation!.latitude!, currentLocation!.longitude!)),
+              const Marker(markerId: MarkerId('source'), position: src),
+              const Marker(markerId: MarkerId('destination'), position: dest)
             },
             onMapCreated: (controller) {
-              _controller.complete(controller);
+              _controllerCompleter.complete(controller);
+              rootBundle.loadString('assets/jsons/darkMap.json').then((style) {
+                _controllerCompleter.future.then((controller) {
+                  controller.setMapStyle(style);
+                });
+              });
             },
           );
   }
@@ -119,7 +147,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> getCurrentLocation(
     String apiKey,
     String? addr,
-    Completer<GoogleMapController> _controller,
+    Completer<GoogleMapController>? _controller,
   ) async {
     Location location = Location();
 
@@ -141,7 +169,7 @@ class _MapScreenState extends State<MapScreen> {
       // convertToAddress(location);
 
       //----------------------//
-      final GoogleMapController controller = await _controller.future;
+      final GoogleMapController controller = await _controller!.future;
       controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
       // var address = await Geocoder2.getDataFromCoordinates(
