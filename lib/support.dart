@@ -99,6 +99,7 @@ class SupportPage extends StatelessWidget {
                           .make(),
                       subtitle: GestureDetector(
                           onTap: () async {
+
                             final phoneNumber = '+7260009482';
                             final Uri launchUri = Uri(
                               scheme: 'tel',
