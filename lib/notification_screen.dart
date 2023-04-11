@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:yoauto_ui/constants/colors.dart';
+import 'constants/colors.dart';
 
 
 
