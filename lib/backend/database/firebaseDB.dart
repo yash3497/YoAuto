@@ -107,4 +107,30 @@ class FirebaseDB {
       Fluttertoast.showToast(msg: "Something was wrong!");
     }
   }
+
+  //--------Add-Report--------//
+  Future<void> report(String driverID, String issue) async {
+    try {
+      String? uid = _auth.currentUser?.uid.toString();
+      CollectionReference reports =
+          FirebaseFirestore.instance.collection('reports');
+      reports.doc(uid).set({
+        'userID': uid,
+        'driverID': driverID,
+        'issue': issue,
+      });
+      CollectionReference notifications =
+          FirebaseFirestore.instance.collection('Users');
+      notifications.doc(uid).update({
+        'notifications': FieldValue.arrayUnion([
+          {
+            'msg':
+                'Your ride has been cancelled as per your report request *${issue}',
+          }
+        ]),
+      });
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Something has wrong, please try again!");
+    }
+  }
 }

@@ -2,7 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:yoauto_task/constants/constant.dart';
+import 'package:yoauto_task/screens/notification/notificationScreen.dart';
 
 import '../constants/shadow.dart';
 import 'payment_status_popup.dart';
@@ -14,7 +16,7 @@ class CustomBellBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        CustomPopups.paymentStatusPopup(context);
+        Get.to(NotificationScreen());
       },
       child: Container(
         width: 45,

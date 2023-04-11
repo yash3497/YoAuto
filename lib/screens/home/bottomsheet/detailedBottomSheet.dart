@@ -3,11 +3,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:yoauto_task/backend/database/firebaseDB.dart';
 import 'package:yoauto_task/constants/ids.dart';
+import 'package:yoauto_task/screens/home/map/navigationScreen.dart';
 import 'package:yoauto_task/widget/widget.dart';
 
 import 'widgets/addonsContainer.dart';
@@ -22,7 +24,9 @@ class DetailedBottomSheet extends StatefulWidget {
   String? contactNumber;
   String? pin;
   String? time;
-  String? distance;
+  double? distance;
+  double? speed;
+  double? price;
   DetailedBottomSheet(
       {super.key,
       this.contactNumber,
@@ -32,7 +36,8 @@ class DetailedBottomSheet extends StatefulWidget {
       this.driverName,
       this.driverPic,
       this.rate,
-      this.distance});
+      this.distance,
+      this.speed});
 
   @override
   State<DetailedBottomSheet> createState() => _DetailedBottomSheetState();
@@ -156,7 +161,7 @@ class _DetailedBottomSheetState extends State<DetailedBottomSheet> {
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       Text(
-                        otp != null ? otp.toString() : "284196",
+                        "284196",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
@@ -178,7 +183,7 @@ class _DetailedBottomSheetState extends State<DetailedBottomSheet> {
                     text: "Distance of auto from you is ",
                     style: TextStyle(color: Colors.black, fontSize: 20)),
                 TextSpan(
-                    text: widget.time ?? "0",
+                    text: "0",
                     style: TextStyle(color: Colors.black, fontSize: 20)),
                 TextSpan(
                     text: " minutes",
@@ -220,7 +225,9 @@ class _DetailedBottomSheetState extends State<DetailedBottomSheet> {
                     text: "You are travelling ",
                     style: TextStyle(color: Colors.black, fontSize: 20)),
                 TextSpan(
-                    text: widget.distance ?? "0",
+                    text: widget.distance != null
+                        ? widget.distance.toString()
+                        : "0",
                     style: TextStyle(color: Colors.black, fontSize: 20)),
                 TextSpan(
                     text: " km",
@@ -309,7 +316,7 @@ class _DetailedBottomSheetState extends State<DetailedBottomSheet> {
                     ),
                   ),
                   Text(
-                    price,
+                    widget.price.toString() ?? price,
                     style: TextStyle(
                       fontSize: 22,
                     ),
@@ -325,26 +332,27 @@ class _DetailedBottomSheetState extends State<DetailedBottomSheet> {
               CustomBtn(
                 text: "Start Ride",
                 onPressed: () {
-                  FirebaseDB().bookRide(
-                      200,
-                      otp,
-                      'driverID',
-                      00.00,
-                      00.00,
-                      00.00,
-                      00.00,
-                      12.3,
-                      2,
-                      'On The Way',
-                      ' widget.startPlace',
-                      'widget.endPlace',
-                      'Cash',
-                      false,
-                      false,
-                      true,
-                      true,
-                      true,
-                      false);
+                  Get.to(NavigationScreen());
+                  // FirebaseDB().bookRide(
+                  //     200,
+                  //     otp,
+                  //     'driverID',
+                  //     00.00,
+                  //     00.00,
+                  //     00.00,
+                  //     00.00,
+                  //     12.3,
+                  //     2,
+                  //     'On The Way',
+                  //     ' widget.startPlace',
+                  //     'widget.endPlace',
+                  //     'Cash',
+                  //     false,
+                  //     false,
+                  //     true,
+                  //     true,
+                  //     true,
+                  //     false);
                 },
               ),
               //------Banner-Ad------//

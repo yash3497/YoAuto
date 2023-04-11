@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 topLeft: Radius.circular(18), topRight: Radius.circular(18))),
         child: Column(
           children: [
-            SearchMapPlaceWidget(apiKey: mapApiKey),
+            // SearchMapPlaceWidget(apiKey: mapApiKey),
             Text(
               "Where To?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -159,7 +159,10 @@ class _HomeScreenState extends State<HomeScreen> {
             //------------Destination-Location-------------//
             InkWell(
               onTap: (() {
-                Get.to(BookRideScreen());
+                Get.to(BookRideScreen(
+                  price: 80,
+                  kiloMeter: 6,
+                ));
               }),
               child: Container(
                   height: 50,
@@ -199,35 +202,6 @@ class HomeContainer extends StatefulWidget {
 class _HomeContainerState extends State<HomeContainer> {
   @override
   Widget build(BuildContext context) {
-    //----------------Day-Night-Checker-----------------//
-    // Get the current time
-    DateTime now = DateTime.now();
-
-// Define the start and end times for day and night
-    final startDayTime = TimeOfDay(hour: 6, minute: 0);
-    final endDayTime = TimeOfDay(hour: 18, minute: 0);
-
-// Convert the current time to a TimeOfDay object
-    TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
-
-// Convert the start and end times to DateTime objects
-    DateTime startDateTime = DateTime(
-        now.year, now.month, now.day, startDayTime.hour, startDayTime.minute);
-    DateTime endDateTime = DateTime(
-        now.year, now.month, now.day, endDayTime.hour, endDayTime.minute);
-
-// Convert the current time to a DateTime object
-    DateTime currentDateTime = DateTime(
-        now.year, now.month, now.day, currentTime.hour, currentTime.minute);
-
-// Check if the current time is within the day time range
-    bool isDayTime = currentDateTime.isAfter(startDateTime) &&
-        currentDateTime.isBefore(endDateTime);
-
-// Set the price based on whether it's day or night
-    double price = isDayTime ? 6.0 : 10.0;
-
-    //-------------------------------------------------//
     TextEditingController startLocation =
         TextEditingController(text: widget.address);
     TextEditingController endLocation =

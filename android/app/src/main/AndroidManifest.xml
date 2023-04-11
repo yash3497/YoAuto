@@ -28,7 +28,7 @@
             android:value="2" />
             <!--Google Map-->
              <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyBtvEIVojiFHFC62dxHdpaCL5r5VFotq9s"/>
+               android:value="AIzaSyDJOZnNwA46ZH60yCn5fYncG7MIWYc6OYo"/>
                <!--AdMob-->
                 <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

@@ -110,6 +110,7 @@ class _MapScreenState extends State<MapScreen> {
           )
         : GoogleMap(
             buildingsEnabled: false,
+            zoomControlsEnabled: false,
             initialCameraPosition: CameraPosition(
                 target: LatLng(src.latitude, src.longitude),
                 // target: LatLng(
@@ -117,7 +118,7 @@ class _MapScreenState extends State<MapScreen> {
                 zoom: 5),
             polylines: {
               Polyline(
-                  polylineId: PolylineId('route'),
+                  polylineId: const PolylineId('route'),
                   points: polylineCoordinates,
                   color: Colors.green,
                   width: 5)
