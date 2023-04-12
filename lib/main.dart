@@ -10,6 +10,7 @@ import 'package:yoauto_task/ride_end_dialog.dart';
 import 'package:yoauto_task/screens/home/book_ride_screen.dart';
 import 'package:yoauto_task/screens/home/bottomsheet/detailedBottomSheet.dart';
 import 'package:yoauto_task/screens/profile/profileScreen.dart';
+import 'package:yoauto_task/setting_page.dart';
 import 'package:yoauto_task/support.dart';
 import './screens/Location/Yoautolocator.dart';
 import 'blocs/bloc.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.amber,
         ),
         // home: const SplashScreen(),
-        home: SupportPage(),
+        home: SettingPage(),
       ),
     );
   }
