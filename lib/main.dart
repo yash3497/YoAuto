@@ -14,6 +14,7 @@ import 'package:yoauto_task/setting_page.dart';
 import 'package:yoauto_task/support.dart';
 import './screens/Location/Yoautolocator.dart';
 import 'blocs/bloc.dart';
+import 'driver_find_custom_widget.dart';
 import 'screens/splash/splash.dart';
 import 'my_ride.dart';
 
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.amber,
         ),
         // home: const SplashScreen(),
-        home: SettingPage(),
+        home: DriverSearching(),
       ),
     );
   }
