@@ -1,20 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapmyindia_gl/mapmyindia_gl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:yoauto_task/screens/home/map/mapScreen.dart';
+import 'package:yoauto_task/screens/home/map/mapmyindia.dart';
 import 'package:yoauto_task/screens/home/map/navigation/inform.dart';
 
 import '../book_ride_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({super.key});
+  double? pickupLat;
+  double? pickupLng;
+  double? dropLat;
+  double? dropLng;
+  NavigationScreen(
+      {super.key, this.pickupLat, this.pickupLng, this.dropLat, this.dropLng});
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+  MapmyIndiaMapController? mapController;
+  Future<void> addPolyline() async {
+    Line? line = await mapController?.addLine(LineOptions(geometry: [
+      LatLng(widget.pickupLat!, widget.pickupLng!),
+      LatLng(widget.dropLat!, widget.dropLng!)
+    ], lineColor: "#0000FF", lineWidth: 5));
+  }
+
+  double? pickupLat;
+  double? dropLat;
+  double? pickupLong;
+  double? dropLong;
+  getEnteredLocations() async {
+    var prefs = await SharedPreferences.getInstance();
+    var pickupLt = prefs.getDouble('pickupLat');
+    var dropLt = prefs.getDouble('dropLat');
+    var pickupLg = prefs.getDouble('pickupLong');
+    var dropLg = prefs.getDouble('dropLong');
+
+    setState(() {
+      pickupLat = pickupLt;
+      dropLat = dropLt;
+      pickupLong = pickupLg;
+      dropLong = dropLg;
+    });
+    print(pickupLong);
+  }
+
   bool isOpen = false;
+  void initState() {
+    getEnteredLocations();
+    MapmyIndiaAccountManager.setMapSDKKey('167140dcd36d6813b79a4d1804928dde');
+    MapmyIndiaAccountManager.setRestAPIKey('167140dcd36d6813b79a4d1804928dde');
+    MapmyIndiaAccountManager.setAtlasClientId(
+        '33OkryzDZsJql_ZA4qDdX0RQfftjgQIAuMwG4H3FzlhKGZX4Tx3ilO75KiS0ICCEP3JZKNxikbD7UyF_rAqDcQ==');
+    MapmyIndiaAccountManager.setAtlasClientSecret(
+        'lrFxI-iSEg-GX5ify7ZXE-mxSkW_fpfJUsNsC5NJpXyoUTXmsjzWxvWF0olV-ofebJ_xJRhFu2jXlXEjG6-TPk5yfOgu0XwK');
+    addPolyline();
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +90,17 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
         ),
       ),
-      body: MapScreen(),
+      body: MapmyIndiaMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(pickupLat ?? 19.0760, pickupLong ?? 72.8777),
+          zoom: 14.0,
+        ),
+        myLocationEnabled: true,
+        trackCameraPosition: true,
+        onMapCreated: (map) => {
+          mapController = map,
+        },
+      ),
       floatingActionButton: InkWell(
         onTap: () {
           setState(() {

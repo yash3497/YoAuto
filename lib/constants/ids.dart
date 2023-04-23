@@ -6,3 +6,4 @@ String fullScreenAdID = 'ca-app-pub-1604403926008527/4015940438';
 
 //-----Map-Api-Key--------//
 String mapApiKey = 'AIzaSyDJOZnNwA46ZH60yCn5fYncG7MIWYc6OYo';
+String placeAPI = 'AIzaSyDGEhrP2ccvSokcIn46xoPKw6kEeXBGOp0';

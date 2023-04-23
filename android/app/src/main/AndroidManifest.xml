@@ -34,6 +34,10 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1604403926008527~2522540145"/>
 
+            <meta-data
+    android:name="com.mapmyindia.sdk.API_KEY"
+    android:value="167140dcd36d6813b79a4d1804928dde" />
+
 
     </application>
     <!-- Internet Permission -->

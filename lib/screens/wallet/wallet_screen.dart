@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:velocity_x/velocity_x.dart';
+import 'package:yoauto_task/screens/wallet/pass/buyPass.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -16,39 +18,40 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white38,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              height: 200,
-              width: 428,
+              height: context.screenHeight / 3,
+              width: context.screenWidth,
               color: const Color.fromRGBO(255, 203, 32, 1),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
-                    "₹ XXX",
+                    "₹0",
                     style: TextStyle(
                         color: Color.fromRGBO(1, 120, 13, 1),
                         fontWeight: FontWeight.w700,
                         fontSize: 46),
                   ),
                   Text("Wallet Money",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 26))
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 26))
+                      .pOnly(top: 20)
                 ],
-              ),
+              ).pOnly(top: 30),
             ),
             const SizedBox(
               height: 50,
             ),
             Container(
-              height: 75,
-              width: 340,
+              height: context.screenHeight / 12,
+              width: context.screenWidth / 1.2,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
@@ -60,28 +63,22 @@ class _WalletScreenState extends State<WalletScreen> {
                 ],
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15.0),
-                    child: Text(
-                      "Add Wallet Money",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600),
-                    ),
+                  Text(
+                    "Add Wallet Money",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add_circle_rounded,
-                          color: Color.fromRGBO(1, 120, 13, 1),
-                          size: 40,
-                        )),
-                  )
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.add_circle_rounded,
+                        color: Color.fromRGBO(1, 120, 13, 1),
+                        size: 40,
+                      )).pOnly(bottom: 8)
                 ],
               ),
             ),
@@ -89,8 +86,8 @@ class _WalletScreenState extends State<WalletScreen> {
               height: 30,
             ),
             Container(
-              height: 75,
-              width: 340,
+              height: context.screenHeight / 12,
+              width: context.screenWidth / 1.2,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
@@ -114,6 +111,9 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 30,
+            ),
             //------Banner-Ad------//
             // isAdLoaded
             //     ? SizedBox(
@@ -125,44 +125,53 @@ class _WalletScreenState extends State<WalletScreen> {
             //         height: 150,
             //       ),
             Container(
-              margin: const EdgeInsets.only(bottom: 30),
-              height: 75,
-              width: 340,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                      spreadRadius: 5,
-                      blurRadius: 5)
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 15.0),
-                    child: Text(
+                height: context.screenHeight / 12,
+                width: context.screenWidth / 1.2,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.1),
+                        spreadRadius: 5,
+                        blurRadius: 5)
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
                       "View Wallet Transaction",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: IconButton(
+                    IconButton(
                         onPressed: () {},
                         icon: const Icon(
                           Icons.history,
                           color: Color.fromRGBO(1, 120, 13, 1),
                           size: 40,
-                        )),
-                  )
-                ],
-              ).pOnly(top: 30),
+                        )).pOnly(bottom: 8)
+                  ],
+                )),
+            SizedBox(
+              height: 30,
+            ),
+            //-----My Passes---------//
+            InkWell(
+              onTap: () => Get.to(BuyPassScreen()),
+              child: Container(
+                height: context.screenHeight / 12,
+                width: context.screenWidth / 1.2,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/Pass-Banner.gif')),
+                    color: Colors.amber.shade300,
+                    border: Border.all(color: Vx.green700, width: 3),
+                    borderRadius: BorderRadius.circular(12)),
+              ),
             ),
           ],
         ),

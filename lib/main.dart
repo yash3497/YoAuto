@@ -7,9 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:yoauto_task/screens/home/book_ride_screen.dart';
-import 'package:yoauto_task/screens/home/bottomsheet/detailedBottomSheet.dart';
-import './screens/Location/Yoautolocator.dart';
+
 import 'blocs/bloc.dart';
 import 'screens/splash/splash.dart';
 
@@ -51,7 +49,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.amber,
         ),
-        home: const SplashScreen(),
+        home: SplashScreen(),
       ),
     );
   }

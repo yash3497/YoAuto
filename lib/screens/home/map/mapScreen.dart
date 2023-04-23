@@ -10,6 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice_ex/directions.dart' as webSr;
 import 'package:location/location.dart';
 import 'package:location_geocoder/location_geocoder.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoauto_task/constants/ids.dart';
 import 'package:yoauto_task/screens/home/map/functions/locationFunctions.dart';
 
@@ -23,6 +25,26 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  double? pickupLat;
+  double? dropLat;
+  double? pickupLong;
+  double? dropLong;
+  getEnteredLocations() async {
+    var prefs = await SharedPreferences.getInstance();
+    var pickupLt = prefs.getDouble('pickupLat');
+    var dropLt = prefs.getDouble('dropLat');
+    var pickupLg = prefs.getDouble('pickupLong');
+    var dropLg = prefs.getDouble('dropLong');
+
+    setState(() {
+      pickupLat = pickupLt;
+      dropLat = dropLt;
+      pickupLong = pickupLg;
+      dropLong = dropLg;
+    });
+    print(pickupLong);
+  }
+
   String? currentAddress;
   String? addr;
   var apiKey = mapApiKey;
@@ -63,14 +85,17 @@ class _MapScreenState extends State<MapScreen> {
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         mapApiKey,
-        PointLatLng(src.latitude, src.longitude),
-        PointLatLng(dest.latitude, dest.longitude));
+        PointLatLng(pickupLat ?? src.latitude, pickupLong ?? src.longitude),
+        PointLatLng(dropLat ?? dest.latitude, dropLong ?? dest.longitude));
 
     if (result.points.isNotEmpty) {
+      print(true);
       result.points.forEach((PointLatLng point) =>
           polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
 
       setState(() {});
+    } else {
+      print(false);
     }
   }
 
@@ -90,6 +115,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     // getDistancePrice();
+    getEnteredLocations();
     addCustomIcon();
     getCurrentLocation(apiKey, addr, _controllerCompleter);
 
@@ -124,15 +150,16 @@ class _MapScreenState extends State<MapScreen> {
                   width: 5)
             },
             markers: {
-              Marker(
-                  markerId: const MarkerId('currentLocation'),
-                  infoWindow: InfoWindow(
-                      title: "You", snippet: "this is your current location"),
-                  position: LatLng(src.latitude, src.longitude)),
               // position: LatLng(
               //     currentLocation!.latitude!, currentLocation!.longitude!)),
-              const Marker(markerId: MarkerId('source'), position: src),
-              const Marker(markerId: MarkerId('destination'), position: dest)
+              Marker(
+                  markerId: MarkerId('source'),
+                  position: LatLng(pickupLat ?? dest.latitude,
+                      pickupLong ?? dest.longitude)),
+              Marker(
+                  markerId: MarkerId('destination'),
+                  position: LatLng(
+                      dropLat ?? src.latitude, dropLong ?? src.longitude))
             },
             onMapCreated: (controller) {
               _controllerCompleter.complete(controller);
@@ -163,7 +190,7 @@ class _MapScreenState extends State<MapScreen> {
 
       // specified current users location
       CameraPosition cameraPosition = CameraPosition(
-        target: LatLng(location.latitude!, location.longitude!),
+        target: LatLng(pickupLat!, pickupLong!),
         zoom: 14,
       );
       Timer(Duration(seconds: 2), () {});

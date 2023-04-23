@@ -19,6 +19,7 @@ import 'package:yoauto_task/screens/CurrentRide/current_ride.dart';
 import 'package:yoauto_task/screens/home/book_ride_screen.dart';
 import 'package:yoauto_task/screens/home/map/functions/locationFunctions.dart';
 import 'package:yoauto_task/screens/home/map/mapScreen.dart';
+import 'package:yoauto_task/screens/home/map/mapmyindia.dart';
 import 'package:yoauto_task/screens/home/search/pickupSearchScreen.dart';
 import 'package:yoauto_task/screens/wallet/wallet_screen.dart';
 import 'package:yoauto_task/widget/custom_drawer_btn.dart';
@@ -46,10 +47,32 @@ class _HomeScreenState extends State<HomeScreen> {
     var prefs = await SharedPreferences.getInstance();
     var pickup = prefs.getString('pickupLocation');
     var drop = prefs.getString('dropLocation');
+
     setState(() {
       pickupStringValue = pickup;
       dropStringValue = drop;
     });
+  }
+
+  double? pickupLat;
+  double? dropLat;
+  double? pickupLong;
+  double? dropLong;
+
+  getLocs() async {
+    var prefs = await SharedPreferences.getInstance();
+    var pickupLt = prefs.getDouble('pickupLat');
+    var dropLt = prefs.getDouble('dropLat');
+    var pickupLg = prefs.getDouble('pickupLong');
+    var dropLg = prefs.getDouble('dropLong');
+
+    setState(() {
+      pickupLat = pickupLt;
+      dropLat = dropLt;
+      pickupLong = pickupLg;
+      dropLong = dropLg;
+    });
+    print(pickupLong);
   }
 
   @override
@@ -57,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     getEnteredLocations();
+    getLocs();
   }
 
   @override
@@ -87,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 30,
         child: CustomDrawerScreen(),
       ),
-      body: MapScreen(),
+      body: MapMyIndiaScreen(),
 
       bottomSheet: Container(
         height: context.screenHeight / 2.8,
@@ -98,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 topLeft: Radius.circular(18), topRight: Radius.circular(18))),
         child: Column(
           children: [
-            // SearchMapPlaceWidget(apiKey: mapApiKey),
+            // SearchMapPlaceWidget(apiKey: placeAPI),
             Text(
               "Where To?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -162,6 +186,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 Get.to(BookRideScreen(
                   price: 80,
                   kiloMeter: 6,
+                  pickupLat: pickupLat,
+                  pickupLng: pickupLong,
+                  dropLat: dropLat,
+                  dropLng: dropLong,
                 ));
               }),
               child: Container(

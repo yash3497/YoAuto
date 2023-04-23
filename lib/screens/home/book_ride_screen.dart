@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:yoauto_task/screens/home/map/mapScreen.dart';
 
 import '../../widget/custom_drawerScreen.dart';
@@ -13,7 +14,18 @@ import 'bottomsheet/detailedBottomSheet.dart';
 class BookRideScreen extends StatefulWidget {
   double? price;
   double? kiloMeter;
-  BookRideScreen({super.key, this.price, this.kiloMeter});
+  double? pickupLat;
+  double? pickupLng;
+  double? dropLat;
+  double? dropLng;
+  BookRideScreen(
+      {super.key,
+      this.price,
+      this.kiloMeter,
+      this.pickupLat,
+      this.pickupLng,
+      this.dropLat,
+      this.dropLng});
 
   @override
   State<BookRideScreen> createState() => _BookRideScreenState();
@@ -22,6 +34,14 @@ class BookRideScreen extends StatefulWidget {
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _BookRideScreenState extends State<BookRideScreen> {
+  MapmyIndiaMapController? mapController;
+  Future<void> addPolyline() async {
+    Line? line = await mapController?.addLine(LineOptions(geometry: [
+      LatLng(widget.pickupLat!, widget.pickupLng!),
+      LatLng(widget.dropLat!, widget.dropLng!)
+    ], lineColor: "#3bb2d0", lineWidth: 4));
+  }
+
   var time;
   var speed;
   var distance;
@@ -36,11 +56,17 @@ class _BookRideScreenState extends State<BookRideScreen> {
     }
   }
 
-  @override
   void initState() {
+    MapmyIndiaAccountManager.setMapSDKKey('167140dcd36d6813b79a4d1804928dde');
+    MapmyIndiaAccountManager.setRestAPIKey('167140dcd36d6813b79a4d1804928dde');
+    MapmyIndiaAccountManager.setAtlasClientId(
+        '33OkryzDZsJql_ZA4qDdX0RQfftjgQIAuMwG4H3FzlhKGZX4Tx3ilO75KiS0ICCEP3JZKNxikbD7UyF_rAqDcQ==');
+    MapmyIndiaAccountManager.setAtlasClientSecret(
+        'lrFxI-iSEg-GX5ify7ZXE-mxSkW_fpfJUsNsC5NJpXyoUTXmsjzWxvWF0olV-ofebJ_xJRhFu2jXlXEjG6-TPk5yfOgu0XwK');
+    addPolyline();
+
     // TODO: implement initState
     super.initState();
-    calculateTime();
   }
 
   @override
@@ -109,7 +135,18 @@ class _BookRideScreenState extends State<BookRideScreen> {
         elevation: 30,
         child: CustomDrawerScreen(),
       ),
-      body: MapScreen(),
+      body: MapmyIndiaMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+              widget.pickupLat ?? 25.321684, widget.pickupLng ?? 82.987289),
+          zoom: 14.0,
+        ),
+        myLocationEnabled: true,
+        trackCameraPosition: true,
+        onMapCreated: (map) => {
+          mapController = map,
+        },
+      ),
       bottomSheet: DetailedBottomSheet(),
     );
   }

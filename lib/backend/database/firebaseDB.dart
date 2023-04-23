@@ -124,6 +124,7 @@ class FirebaseDB {
       notifications.doc(uid).update({
         'notifications': FieldValue.arrayUnion([
           {
+            'isOpened': false,
             'msg':
                 'Your ride has been cancelled as per your report request *${issue}',
           }

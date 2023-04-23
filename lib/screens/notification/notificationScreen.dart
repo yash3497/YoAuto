@@ -30,7 +30,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             }
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: snapshot.data!['notifications'].length,
               itemBuilder: (BuildContext context, int index) {
                 var notifications = snapshot.data!['notifications'][index];
                 var msg = notifications['msg'];
