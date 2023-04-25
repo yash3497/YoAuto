@@ -1,32 +1,50 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:yoauto_task/screens/BottomBar/master_screen.dart';
 import 'package:yoauto_task/screens/home/mainHome.dart';
-import 'package:yoauto_task/screens/home/mainScreen.dart';
-import 'package:yoauto_task/screens/home/map/mapmyindia.dart';
 import 'package:http/http.dart' as http;
 
 class PickupSearchDelegate extends SearchDelegate {
   static String? selectedValue;
 
   getSuggestions() async {
-    if (!query.isEmpty) {
+    if (query.isNotEmpty) {
       String url =
           'https://atlas.mapmyindia.com/api/places/search/json?query=$query';
-      String accessToken = '167140dcd36d6813b79a4d1804928dde';
-      Uri uri = Uri.parse(url + '&access_token=$accessToken');
+      String accessToken = '7b882118-827e-4edb-ba1d-49b543207ab8';
+      Uri uri = Uri.parse('$url&access_token=$accessToken');
       http.Response response = await http.get(uri);
-      Map<String, dynamic> data = json.decode(response.body);
-      List<dynamic>? suggestions = data['suggestedLocations'];
-      print(suggestions);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        List suggestions = data['suggestedLocations'];
+        searchTerms =
+            suggestions.map((e) => e['placeAddress'].toString()).toList();
+        print(searchTerms);
+      } else {
+        print(
+            "PickupSearchDelegate: Error ${response.statusCode} ${response.body}");
+      }
     } else {
       print("Null");
     }
+  }
+
+  Future<Coordinates> latlongFromAddress() async {
+    try {
+      var addresses = await Geocoder.local.findAddressesFromQuery(query);
+      var first = addresses.first;
+
+      return first.coordinates;
+    } catch (e) {
+      print(e);
+    }
+    return Coordinates(0, 0);
   }
 
   // Demo list to show querying
@@ -39,16 +57,6 @@ class PickupSearchDelegate extends SearchDelegate {
     "Juhu Beach, Mumbai",
     "Lower Parel Railway Station East, Mumbai",
     "Haji Ali, Malabar Hill, Mumbai"
-  ];
-  List<LatLng> positions = [
-    LatLng(19.0904, 72.8628),
-    LatLng(19.0547, 72.8397),
-    LatLng(18.9220, 72.8347),
-    LatLng(19.049029, 72.820647),
-    LatLng(18.9398, 72.8354),
-    LatLng(19.0974, 72.8264),
-    LatLng(18.9982, 72.8270),
-    LatLng(18.9778, 72.8105)
   ];
 
   // first overwrite to
@@ -79,16 +87,17 @@ class PickupSearchDelegate extends SearchDelegate {
   // third overwrite to show query result
   @override
   Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
-    }
+    // List<String> matchQuery = [];
+    // for (var fruit in searchTerms) {
+    //   if (fruit.toLowerCase().contains(query.toLowerCase())) {
+    //     matchQuery.add(fruit);
+    //   }
+    // }
     return ListView.builder(
-      itemCount: matchQuery.length,
+      itemCount: searchTerms.length,
+      shrinkWrap: true,
       itemBuilder: (context, index) {
-        var result = matchQuery[index];
+        var result = searchTerms[index];
         return ListTile(
           title: Text(result),
         );
@@ -100,12 +109,12 @@ class PickupSearchDelegate extends SearchDelegate {
   // querying process at the runtime
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
-    }
+    // List<String> matchQuery = [];
+    // for (var fruit in searchTerms) {
+    //   if (fruit.toLowerCase().contains(query.toLowerCase())) {
+    //     matchQuery.add(fruit);
+    //   }
+    // }
     getSuggestions();
     return SingleChildScrollView(
       child: Column(
@@ -122,18 +131,21 @@ class PickupSearchDelegate extends SearchDelegate {
             ),
           ).p(12),
           ListView.builder(
-            itemCount: matchQuery.length,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: searchTerms.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              var result = matchQuery[index];
+              var result = searchTerms[index];
 
               return InkWell(
                 onTap: () async {
                   query = result;
                   var prefs = await SharedPreferences.getInstance();
                   prefs.setString('pickupLocation', query);
-                  prefs.setDouble('pickupLat', positions[index].latitude);
-                  prefs.setDouble('pickupLong', positions[index].longitude);
+                  Coordinates coordinates = await latlongFromAddress();
+                  log("Coordinates: $coordinates");
+                  prefs.setDouble('pickupLat', coordinates.latitude!);
+                  prefs.setDouble('pickupLong', coordinates.longitude!);
                   Get.to(HomeScreen(),
                       transition: Transition.fade,
                       duration: Duration(milliseconds: 300));
@@ -168,16 +180,39 @@ class DropSearchDelegate extends SearchDelegate {
     "Lower Parel Railway Station East, Mumbai",
     "Haji Ali, Malabar Hill, Mumbai"
   ];
-  List<LatLng> positions = [
-    LatLng(19.0904, 72.8628),
-    LatLng(19.0547, 72.8397),
-    LatLng(18.9220, 72.8347),
-    LatLng(19.049029, 72.820647),
-    LatLng(18.9398, 72.8354),
-    LatLng(19.0974, 72.8264),
-    LatLng(18.9982, 72.8270),
-    LatLng(18.9778, 72.8105)
-  ];
+  getSuggestions() async {
+    if (query.isNotEmpty) {
+      String url =
+          'https://atlas.mapmyindia.com/api/places/search/json?query=$query';
+      String accessToken = '7b882118-827e-4edb-ba1d-49b543207ab8';
+      Uri uri = Uri.parse('$url&access_token=$accessToken');
+      http.Response response = await http.get(uri);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        List suggestions = data['suggestedLocations'];
+        searchTerms =
+            suggestions.map((e) => e['placeAddress'].toString()).toList();
+        print(searchTerms);
+      } else {
+        print(
+            "PickupSearchDelegate: Error ${response.statusCode} ${response.body}");
+      }
+    } else {
+      print("Null");
+    }
+  }
+
+  Future<Coordinates> latlongFromAddress() async {
+    try {
+      var addresses = await Geocoder.local.findAddressesFromQuery(query);
+      var first = addresses.first;
+
+      return first.coordinates;
+    } catch (e) {
+      print(e);
+    }
+    return Coordinates(0, 0);
+  }
 
   // first overwrite to
   // clear the search text
@@ -207,16 +242,10 @@ class DropSearchDelegate extends SearchDelegate {
   // third overwrite to show query result
   @override
   Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
-    }
     return ListView.builder(
-      itemCount: matchQuery.length,
+      itemCount: searchTerms.length,
       itemBuilder: (context, index) {
-        var result = matchQuery[index];
+        var result = searchTerms[index];
         return ListTile(
           title: Text(result),
         );
@@ -228,23 +257,19 @@ class DropSearchDelegate extends SearchDelegate {
   // querying process at the runtime
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
-    }
+    getSuggestions();
     return ListView.builder(
-      itemCount: matchQuery.length,
+      itemCount: searchTerms.length,
       itemBuilder: (context, index) {
-        var result = matchQuery[index];
+        var result = searchTerms[index];
         return InkWell(
           onTap: () async {
             query = result;
             var prefs = await SharedPreferences.getInstance();
+            Coordinates coordinates = await latlongFromAddress();
             prefs.setString('dropLocation', query);
-            prefs.setDouble('dropLat', positions[index].latitude);
-            prefs.setDouble('dropLong', positions[index].longitude);
+            prefs.setDouble('dropLat', coordinates.latitude);
+            prefs.setDouble('dropLong', coordinates.longitude);
             Get.to(HomeScreen(),
                 transition: Transition.fade,
                 duration: Duration(milliseconds: 300));

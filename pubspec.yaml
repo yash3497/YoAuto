@@ -60,7 +60,8 @@ dependencies:
   location: ^4.4.0
   google_mobile_ads: ^2.4.0
   search_map_place_updated: ^0.0.4
-  location_geocoder: ^1.0.5
+  # location_geocoder: ^1.0.5
+  geocoder: ^0.2.1
   google_maps_webservice_ex: ^0.0.1+2
   calendar_date_picker2: ^0.5.1
   qr_flutter: ^4.0.0

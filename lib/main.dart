@@ -17,7 +17,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark,
     statusBarIconBrightness: Brightness.dark,
-    statusBarColor: Colors.white, // status bar color
+    statusBarColor: Colors.white, // status bar colorau
   ));
   await MobileAds.instance.initialize();
 

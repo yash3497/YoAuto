@@ -68,13 +68,6 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                       } else {
                         AuthManager()
                             .signInWithPhone("+91" + phoneController.text);
-                        Get.to(
-                            OtpScreen(
-                              number: phoneController.text,
-                              name: "",
-                            ),
-                            transition: Transition.fadeIn,
-                            duration: Duration(milliseconds: 800));
                       }
                     },
                   ),

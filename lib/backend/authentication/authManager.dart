@@ -14,6 +14,7 @@ import 'package:yoauto_task/screens/authentication/otp_screen.dart';
 import 'package:yoauto_task/screens/authentication/phone_login_page.dart';
 import 'package:yoauto_task/screens/home/mainScreen.dart';
 
+import '../../screens/authentication/register_page.dart';
 import '../../screens/home/mainHome.dart';
 
 class AuthManager {
@@ -55,6 +56,57 @@ class AuthManager {
   //---------Login with phone no-------------//
   Future<void> signInWithPhone(String phone) async {
     try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Users');
+      await users
+          .where('phone', isEqualTo: phone.replaceAll("+91", ""))
+          .get()
+          .then((QuerySnapshot querySnapshot) async {
+        if (querySnapshot.docs.isEmpty) {
+          Fluttertoast.showToast(
+              msg: "User not found, Please Register to Continue",
+              toastLength: Toast.LENGTH_LONG);
+          Get.to(
+            RegisterPage(),
+            transition: Transition.fadeIn,
+          );
+        } else {
+          await FirebaseAuth.instance.verifyPhoneNumber(
+              phoneNumber: phone,
+              verificationCompleted: (PhoneAuthCredential credential) {},
+              verificationFailed: (FirebaseAuthException e) {},
+              codeSent: (String verificationId, forceResendingToken) {
+                PhoneLoginPage.verify = verificationId;
+              },
+              codeAutoRetrievalTimeout: (String verificationId) {});
+
+          String? uid = _auth.currentUser?.uid.toString();
+
+          //------Save user details locally--------//
+          SharedPreferences _prefs = await SharedPreferences.getInstance();
+          _prefs.setString('phone', phone);
+
+          Get.to(
+              OtpScreen(
+                number: phone,
+                name: querySnapshot.docs[0]['name'],
+              ),
+              transition: Transition.fadeIn,
+              duration: Duration(milliseconds: 800));
+        }
+      });
+
+      // User is signed in.
+    } on FirebaseAuthException catch (e) {
+      // An error occurred.
+      Fluttertoast.showToast(
+          msg: e.message.toString(), toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
+  //---------Register with phone no-------------//
+  Future<void> signUpWithPhone(String phone) async {
+    try {
       await FirebaseAuth.instance.verifyPhoneNumber(
           phoneNumber: phone,
           verificationCompleted: (PhoneAuthCredential credential) {},
@@ -64,8 +116,6 @@ class AuthManager {
           },
           codeAutoRetrievalTimeout: (String verificationId) {});
 
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('Users');
       String? uid = _auth.currentUser?.uid.toString();
 
       //------Save user details locally--------//

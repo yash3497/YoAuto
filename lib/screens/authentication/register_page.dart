@@ -80,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             msg: "Please Enter Valid Phone No.");
                       } else {
                         AuthManager()
-                            .signInWithPhone("+91" + mobilenumController.text);
+                            .signUpWithPhone("+91" + mobilenumController.text);
                         Get.to(
                             OtpScreen(
                               number: mobilenumController.text,

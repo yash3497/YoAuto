@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice_ex/directions.dart' as webSr;
 import 'package:location/location.dart';
-import 'package:location_geocoder/location_geocoder.dart';
+// import 'package:location_geocoder/location_geocoder.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoauto_task/constants/ids.dart';
@@ -49,7 +49,7 @@ class _MapScreenState extends State<MapScreen> {
   String? addr;
   var apiKey = mapApiKey;
   Completer<GoogleMapController> _controllerCompleter = Completer();
-  final LocatitonGeocoder geocoder = LocatitonGeocoder(mapApiKey);
+  // final LocatitonGeocoder geocoder = LocatitonGeocoder(mapApiKey);
   //-----Demo-Locations------//
   // destination point
 
@@ -231,5 +231,4 @@ class _MapScreenState extends State<MapScreen> {
   //   });
   //   return await Geolocator.getCurrentPosition();
   // }
-
 }

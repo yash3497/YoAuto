@@ -22,14 +22,15 @@ class _MapMyIndiaScreenState extends State<MapMyIndiaScreen> {
     var dropLt = prefs.getDouble('dropLat');
     var pickupLg = prefs.getDouble('pickupLong');
     var dropLg = prefs.getDouble('dropLong');
+    pickupLat = pickupLt;
+    dropLat = dropLt;
+    pickupLong = pickupLg;
+    dropLong = dropLg;
 
-    setState(() {
-      pickupLat = pickupLt;
-      dropLat = dropLt;
-      pickupLong = pickupLg;
-      dropLong = dropLg;
-    });
-    print(pickupLong);
+    print("Pickup Location: $pickupLat, $pickupLong");
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   //----Marekrs-------//
@@ -40,22 +41,23 @@ class _MapMyIndiaScreenState extends State<MapMyIndiaScreen> {
 
   @override
   void initState() {
-    MapmyIndiaAccountManager.setMapSDKKey('167140dcd36d6813b79a4d1804928dde');
+    getEnteredLocations();
+    MapmyIndiaAccountManager.setMapSDKKey(
+        '7b882118-827e-4edb-ba1d-49b543207ab8');
     MapmyIndiaAccountManager.setRestAPIKey('167140dcd36d6813b79a4d1804928dde');
     MapmyIndiaAccountManager.setAtlasClientId(
         '33OkryzDZsJql_ZA4qDdX0RQfftjgQIAuMwG4H3FzlhKGZX4Tx3ilO75KiS0ICCEP3JZKNxikbD7UyF_rAqDcQ==');
     MapmyIndiaAccountManager.setAtlasClientSecret(
         'lrFxI-iSEg-GX5ify7ZXE-mxSkW_fpfJUsNsC5NJpXyoUTXmsjzWxvWF0olV-ofebJ_xJRhFu2jXlXEjG6-TPk5yfOgu0XwK');
-    getEnteredLocations();
+
     // TODO: implement initState
     super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     return MapmyIndiaMap(
       initialCameraPosition: CameraPosition(
-        target: LatLng(pickupLat ?? 25.321684, pickupLong ?? 82.987289),
+        target: LatLng(pickupLat!, pickupLong!),
         zoom: 14.0,
       ),
       myLocationEnabled: true,

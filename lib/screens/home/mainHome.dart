@@ -145,12 +145,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icon(
                         Icons.location_pin,
                       ).p(12),
-                      Center(
-                        child: Text(
-                          currentAddress ??
-                              pickupStringValue ??
-                              "Add a pickup location",
-                          style: TextStyle(fontSize: 16),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            currentAddress ??
+                                pickupStringValue ??
+                                "Add a pickup location",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ),
                     ],
@@ -173,10 +175,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icon(
                         Icons.pin_drop,
                       ).p(12),
-                      Center(
-                        child: Text(
-                          dropStringValue ?? "Add a drop location",
-                          style: TextStyle(fontSize: 16),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            dropStringValue ?? "Add a drop location",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ),
                     ],
