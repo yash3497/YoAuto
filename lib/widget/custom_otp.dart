@@ -19,8 +19,8 @@ class CustomOtpBox extends StatelessWidget {
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(10),
-        fieldHeight: 60,
-        fieldWidth: 50,
+        fieldHeight: 50,
+        fieldWidth: MediaQuery.of(context).size.width*0.1,
         activeFillColor: Colors.white,
         borderWidth: 3,
         activeColor: Colors.black,
