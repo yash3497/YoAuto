@@ -10,6 +10,7 @@ import '/widget/widget.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'bottomsheet/detailedBottomSheet.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookRideScreen extends StatefulWidget {
   double? price;
@@ -18,6 +19,7 @@ class BookRideScreen extends StatefulWidget {
   double? pickupLng;
   double? dropLat;
   double? dropLng;
+  String? driverId;
   BookRideScreen(
       {super.key,
       this.price,
@@ -25,7 +27,8 @@ class BookRideScreen extends StatefulWidget {
       this.pickupLat,
       this.pickupLng,
       this.dropLat,
-      this.dropLng});
+      this.dropLng,
+      this.driverId});
 
   @override
   State<BookRideScreen> createState() => _BookRideScreenState();
@@ -147,7 +150,11 @@ class _BookRideScreenState extends State<BookRideScreen> {
           mapController = map,
         },
       ),
-      bottomSheet: DetailedBottomSheet(),
+      bottomSheet: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('drivers').doc(),
+          builder: (context, snapshot) {
+            return DetailedBottomSheet();
+          }),
     );
   }
 }

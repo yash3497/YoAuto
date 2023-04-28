@@ -25,7 +25,6 @@ class _OtpScreenState extends State<OtpScreen> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,17 +57,16 @@ class _OtpScreenState extends State<OtpScreen> {
             CustomOtpBox(otp: otpController).pOnly(left: 30, right: 30),
             const Spacer(),
             Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  "Didn't receive OTP?".text.color(hintColor).size(15).make(),
-                  Text(
-                    " Request again",
-                    style: text2style(color: green, weight: FontWeight.w600),
-                  ).onInkTap(() {}),
-                ],
-              )
-            ),
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                "Didn't receive OTP?".text.color(hintColor).size(15).make(),
+                Text(
+                  " Request again",
+                  style: text2style(color: green, weight: FontWeight.w600),
+                ).onInkTap(() {}),
+              ],
+            )),
             20.heightBox,
             CustomBtn(
               text: 'Verify & Login',

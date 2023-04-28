@@ -18,7 +18,7 @@ class CustomBtn extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           height: 50,
-          width: MediaQuery.of(context).size.width*0.8,
+          width: MediaQuery.of(context).size.width * 0.8,
           child: Center(
             child: Text(
               text,
