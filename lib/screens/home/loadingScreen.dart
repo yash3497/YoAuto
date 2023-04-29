@@ -46,7 +46,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             print(isApproved ?? "error");
 
             if (isApproved) {
-              return Center(
+              return const Center(
                 child: Text(
                     "Your Ride has Approved, Please wait we are appointing a best route to your driver..."),
               );

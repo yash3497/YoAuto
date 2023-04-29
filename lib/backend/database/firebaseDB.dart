@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoauto_task/screens/home/map/navigationScreen.dart';
 
 class FirebaseDB {
   //--------User-ID------//
@@ -164,6 +166,8 @@ class FirebaseDB {
         'from': pickUpName,
         'to': dropName,
         'isApproved': false,
+        'isStarted': false,
+        'time': ''
       });
       final String documentId = documentReference.id;
       await documentReference.set({'id': documentId}, SetOptions(merge: true));
@@ -183,6 +187,20 @@ class FirebaseDB {
       // });
     } catch (e) {
       Fluttertoast.showToast(msg: "Something has wrong, please try again!");
+    }
+  }
+
+  Future<void> startRide(String rideId) async {
+    try {
+      String? uid = _auth.currentUser?.uid.toString();
+
+      CollectionReference req =
+          FirebaseFirestore.instance.collection('rideRequest');
+
+      req.doc(rideId).update({'isStarted': true});
+      Get.to(NavigationScreen());
+    } catch (e) {
+      print("Error from Start Ride Function : " + e.toString());
     }
   }
 }

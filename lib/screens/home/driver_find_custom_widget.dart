@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -9,7 +10,9 @@ import 'package:yoauto_task/screens/home/book_ride_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DriverHomePage extends StatelessWidget {
-  const DriverHomePage({Key? key}) : super(key: key);
+  DriverHomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +33,26 @@ class DriverHomePage extends StatelessWidget {
 }
 
 class DriverSearching extends StatefulWidget {
-  const DriverSearching({Key? key}) : super(key: key);
+  DriverSearching({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DriverSearching> createState() => _DriverSearchingState();
 }
 
 class _DriverSearchingState extends State<DriverSearching> {
+  String? reqId;
+  getDocId() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    var docId = await _prefs.getString('reqId');
+
+    setState(() {
+      reqId = docId;
+    });
+    print(reqId ?? 'null');
+  }
+
   int _timeRemaining = 10 * 60; // 10 minutes
 
   String imagePath = "assets/images/search.gif";
@@ -44,8 +60,6 @@ class _DriverSearchingState extends State<DriverSearching> {
 
   //--------Timer-&-Navigate-----//
   timerNavi() async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    var uid = _auth.currentUser?.uid;
     Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_timeRemaining > 0) {
@@ -61,20 +75,13 @@ class _DriverSearchingState extends State<DriverSearching> {
         }
       });
     });
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('Users').doc(uid).get();
-    List<dynamic> myArray = snapshot.data()?['rides'];
-    if (myArray.isEmpty && myArray == null) {
-      print('Array is null');
-    } else {
-      print(myArray[0]);
-    }
-    Get.to(BookRideScreen());
   }
 
   @override
   void initState() {
     super.initState();
+    timerNavi();
+    getDocId();
   }
 
   @override
@@ -82,25 +89,39 @@ class _DriverSearchingState extends State<DriverSearching> {
     int minutes = _timeRemaining ~/ 60;
     int seconds = _timeRemaining % 60;
 
-    return AlertDialog(
-      titlePadding: EdgeInsets.fromLTRB(50, 0, 50, 50),
-      icon: Image.asset(
-        imagePath,
-        height: 120,
-        width: 120,
-      ), // networkIssue
-      title: Column(
-        children: [
-          Text(
-            message,
-            style: TextStyle(fontSize: 20, color: Colors.green[900]),
-          ),
-          Text(
-            "$minutes:${seconds.toString().padLeft(2, '0')}",
-            style: TextStyle(fontSize: 30, color: Colors.red[800]),
-          ),
-        ],
-      ),
-    );
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('rideRequest')
+            .doc(reqId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          var isAccepted = snapshot.data?['isApproved'];
+          if (isAccepted == true) {
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BookRideScreen()));
+            });
+          }
+          return AlertDialog(
+            titlePadding: EdgeInsets.fromLTRB(50, 0, 50, 50),
+            icon: Image.asset(
+              imagePath,
+              height: 120,
+              width: 120,
+            ), // networkIssue
+            title: Column(
+              children: [
+                Text(
+                  message,
+                  style: TextStyle(fontSize: 20, color: Colors.green[900]),
+                ),
+                Text(
+                  "$minutes:${seconds.toString().padLeft(2, '0')}",
+                  style: TextStyle(fontSize: 30, color: Colors.red[800]),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

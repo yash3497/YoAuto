@@ -18,6 +18,7 @@ import 'package:yoauto_task/backend/services/locationServices.dart';
 import 'package:yoauto_task/constants/ids.dart';
 import 'package:yoauto_task/screens/CurrentRide/current_ride.dart';
 import 'package:yoauto_task/screens/home/book_ride_screen.dart';
+import 'package:yoauto_task/screens/home/driver_find_custom_widget.dart';
 import 'package:yoauto_task/screens/home/loadingScreen.dart';
 import 'package:yoauto_task/screens/home/map/functions/locationFunctions.dart';
 import 'package:yoauto_task/screens/home/map/mapScreen.dart';
@@ -27,6 +28,7 @@ import 'package:yoauto_task/screens/wallet/wallet_screen.dart';
 import 'package:yoauto_task/widget/custom_drawer_btn.dart';
 import 'package:yoauto_task/widget/widget.dart';
 
+import '../../functions/distances.dart';
 import '../../widget/custom_drawerScreen.dart';
 import 'bottomsheet/detailedBottomSheet.dart';
 
@@ -41,6 +43,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? pickupStringValue;
   String? dropStringValue;
+  var distance;
+  var pin;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String? currentAddress = LocationFunctions.currentAddress;
@@ -197,18 +201,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   dropLat: dropLat,
                 //   dropLng: dropLong,
                 // ));
+
                 FirebaseDB().sendBookingRequest(
                     [pickupLat!, pickupLong!],
                     [dropLat!, dropLong!],
-                    128,
-                    10.3,
+                    0,
+                    0,
                     pickupStringValue!,
                     dropStringValue!);
-                Get.to(
-                    LoadingScreen(
-                      msg:
-                          'We sent your ride details to your nearest driver, waiting for approval, Please Wait.....',
-                    ),
+                calculateDistance(
+                    pickupLat, pickupLong, dropLat, dropLong, distance);
+                calculateTime(distance);
+                saveRandomCodeNumberToFirestore();
+                Get.to(DriverSearching(),
                     transition: Transition.fadeIn,
                     duration: Duration(seconds: 1));
               }),

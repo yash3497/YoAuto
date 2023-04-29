@@ -10,12 +10,9 @@ import 'package:yoauto_task/screens/home/map/navigation/inform.dart';
 import '../book_ride_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
-  double? pickupLat;
-  double? pickupLng;
-  double? dropLat;
-  double? dropLng;
-  NavigationScreen(
-      {super.key, this.pickupLat, this.pickupLng, this.dropLat, this.dropLng});
+  NavigationScreen({
+    super.key,
+  });
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
@@ -23,12 +20,6 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   MapmyIndiaMapController? mapController;
-  Future<void> addPolyline() async {
-    Line? line = await mapController?.addLine(LineOptions(geometry: [
-      LatLng(widget.pickupLat!, widget.pickupLng!),
-      LatLng(widget.dropLat!, widget.dropLng!)
-    ], lineColor: "#0000FF", lineWidth: 5));
-  }
 
   double? pickupLat;
   double? dropLat;
@@ -48,6 +39,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
       dropLong = dropLg;
     });
     print(pickupLong);
+  }
+
+  Future<void> addPolyline() async {
+    Line? line = await mapController?.addLine(LineOptions(geometry: [
+      LatLng(pickupLat!, pickupLong!),
+      LatLng(dropLat!, dropLong!)
+    ], lineColor: "#0000FF", lineWidth: 5));
   }
 
   bool isOpen = false;

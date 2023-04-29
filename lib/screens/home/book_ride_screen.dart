@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
+import 'package:yoauto_task/functions/distances.dart';
 import 'package:yoauto_task/screens/home/map/mapScreen.dart';
 
 import '../../widget/custom_drawerScreen.dart';
@@ -13,6 +16,7 @@ import 'bottomsheet/detailedBottomSheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookRideScreen extends StatefulWidget {
+  String? reqId;
   double? price;
   double? kiloMeter;
   double? pickupLat;
@@ -20,15 +24,20 @@ class BookRideScreen extends StatefulWidget {
   double? dropLat;
   double? dropLng;
   String? driverId;
+  double? pin;
+  double? time;
   BookRideScreen(
       {super.key,
+      this.reqId,
       this.price,
       this.kiloMeter,
       this.pickupLat,
       this.pickupLng,
       this.dropLat,
       this.dropLng,
-      this.driverId});
+      this.driverId,
+      this.pin,
+      this.time});
 
   @override
   State<BookRideScreen> createState() => _BookRideScreenState();
@@ -43,20 +52,6 @@ class _BookRideScreenState extends State<BookRideScreen> {
       LatLng(widget.pickupLat!, widget.pickupLng!),
       LatLng(widget.dropLat!, widget.dropLng!)
     ], lineColor: "#3bb2d0", lineWidth: 4));
-  }
-
-  var time;
-  var speed;
-  var distance;
-
-  calculateTime() {
-    if (speed != null || distance != null) {
-      setState(() {
-        time = distance ~/ speed;
-        time = time.toString();
-      });
-      print(time);
-    }
   }
 
   void initState() {
@@ -150,10 +145,27 @@ class _BookRideScreenState extends State<BookRideScreen> {
           mapController = map,
         },
       ),
-      bottomSheet: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('drivers').doc(),
+      bottomSheet: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('drivers')
+              .doc(widget.driverId)
+              .snapshots(),
           builder: (context, snapshot) {
-            return DetailedBottomSheet();
+            var driverName = snapshot.data?['name'];
+            var vehicleNumber =
+                snapshot.data?['vehicleNumber'] ?? "MH 43 CF 2297";
+            var contactNumber =
+                snapshot.data?['contactNumber'] ?? "+91 9988667755";
+            var driverImage = snapshot.data?['driverImage'] ??
+                'https://images.unsplash.com/photo-1609252509102-aa73ff792667?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80';
+            return DetailedBottomSheet(
+              rideId: widget.reqId,
+              vehicleNumber: vehicleNumber,
+              driverName: driverName,
+              driverPic: [driverImage],
+              time: widget.time ?? 1,
+              pin: widget.pin.toString(),
+            );
           }),
     );
   }
