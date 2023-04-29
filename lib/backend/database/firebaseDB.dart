@@ -164,6 +164,7 @@ class FirebaseDB {
         'from': pickUpName,
         'to': dropName,
         'isApproved': false,
+        'isStarted': false,
       });
       final String documentId = documentReference.id;
       await documentReference.set({'id': documentId}, SetOptions(merge: true));
@@ -183,6 +184,19 @@ class FirebaseDB {
       // });
     } catch (e) {
       Fluttertoast.showToast(msg: "Something has wrong, please try again!");
+    }
+  }
+
+  Future<void> startRide(String rideId) async {
+    try {
+      String? uid = _auth.currentUser?.uid.toString();
+
+      CollectionReference req =
+          FirebaseFirestore.instance.collection('rideRequest');
+
+      req.doc(rideId).update({'isStarted': true});
+    } catch (e) {
+      print("Error from Start Ride Function : " + e.toString());
     }
   }
 }
