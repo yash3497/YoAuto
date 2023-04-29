@@ -349,7 +349,7 @@ class _DetailedBottomSheetState extends State<DetailedBottomSheet> {
                       text: "Start Ride",
                       onPressed: () {
                         FirebaseDB().startRide(widget.rideId!);
-                        Get.to(NavigationScreen());
+                       
                         // FirebaseDB().bookRide(
                         //     200,
                         //     otp,

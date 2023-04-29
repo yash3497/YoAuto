@@ -51,7 +51,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   bool isOpen = false;
   void initState() {
     getEnteredLocations();
-    MapmyIndiaAccountManager.setMapSDKKey('167140dcd36d6813b79a4d1804928dde');
+    MapmyIndiaAccountManager.setMapSDKKey(
+        '7b882118-827e-4edb-ba1d-49b543207ab8');
     MapmyIndiaAccountManager.setRestAPIKey('167140dcd36d6813b79a4d1804928dde');
     MapmyIndiaAccountManager.setAtlasClientId(
         '33OkryzDZsJql_ZA4qDdX0RQfftjgQIAuMwG4H3FzlhKGZX4Tx3ilO75KiS0ICCEP3JZKNxikbD7UyF_rAqDcQ==');

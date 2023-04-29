@@ -56,7 +56,7 @@ class _MapMyIndiaScreenState extends State<MapMyIndiaScreen> {
   Widget build(BuildContext context) {
     return MapmyIndiaMap(
       initialCameraPosition: CameraPosition(
-        target: LatLng(pickupLat!, pickupLong!),
+        target: LatLng(pickupLat ?? 0, pickupLong ?? 0),
         zoom: 14.0,
       ),
       myLocationEnabled: true,
