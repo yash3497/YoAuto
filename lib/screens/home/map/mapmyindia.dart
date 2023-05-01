@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoauto_task/constants/constant.dart';
+import 'package:yoauto_task/screens/home/map/functions/mapConfigs.dart';
 
 class MapMyIndiaScreen extends StatefulWidget {
   const MapMyIndiaScreen({super.key});
@@ -42,13 +44,7 @@ class _MapMyIndiaScreenState extends State<MapMyIndiaScreen> {
   @override
   void initState() {
     getEnteredLocations();
-    MapmyIndiaAccountManager.setMapSDKKey(
-        '7b882118-827e-4edb-ba1d-49b543207ab8');
-    MapmyIndiaAccountManager.setRestAPIKey('167140dcd36d6813b79a4d1804928dde');
-    MapmyIndiaAccountManager.setAtlasClientId(
-        '33OkryzDZsJql_ZA4qDdX0RQfftjgQIAuMwG4H3FzlhKGZX4Tx3ilO75KiS0ICCEP3JZKNxikbD7UyF_rAqDcQ==');
-    MapmyIndiaAccountManager.setAtlasClientSecret(
-        'lrFxI-iSEg-GX5ify7ZXE-mxSkW_fpfJUsNsC5NJpXyoUTXmsjzWxvWF0olV-ofebJ_xJRhFu2jXlXEjG6-TPk5yfOgu0XwK');
+    MapMyIndiaConfigs();
     // TODO: implement initState
     super.initState();
   }
