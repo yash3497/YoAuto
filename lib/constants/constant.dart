@@ -3,7 +3,7 @@ export 'text.dart';
 export 'nav_bar_items.dart';
 export 'shadow.dart';
 
-String mapMyIndiaSdkKey = 'b188d213-36b3-45ec-8b6d-285827ddbe21';
+String mapMyIndiaSdkKey = '25ba4bff-c7a1-48ce-8930-579a259fb7d5';
 String mapMyIndiaResetKey = '167140dcd36d6813b79a4d1804928dde';
 String mapMyIndiaAtlasClientId =
     '33OkryzDZsJql_ZA4qDdX0RQfftjgQIAuMwG4H3FzlhKGZX4Tx3ilO75KiS0ICCEP3JZKNxikbD7UyF_rAqDcQ==';

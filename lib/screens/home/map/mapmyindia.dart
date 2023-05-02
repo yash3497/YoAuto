@@ -30,9 +30,9 @@ class _MapMyIndiaScreenState extends State<MapMyIndiaScreen> {
     dropLong = dropLg;
 
     print("Pickup Location: $pickupLat, $pickupLong");
-    if (mounted) {
-      setState(() {});
-    }
+    // if (mounted) {
+    //   setState(() {});
+    // }
   }
 
   //----Marekrs-------//
@@ -43,23 +43,30 @@ class _MapMyIndiaScreenState extends State<MapMyIndiaScreen> {
 
   @override
   void initState() {
-    getEnteredLocations();
+    // getEnteredLocations();
     MapMyIndiaConfigs();
     // TODO: implement initState
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    return MapmyIndiaMap(
-      initialCameraPosition: CameraPosition(
-        target: LatLng(pickupLat ?? 0, pickupLong ?? 0),
-        zoom: 14.0,
-      ),
-      myLocationEnabled: true,
-      trackCameraPosition: true,
-      onMapCreated: (map) => {
-        mapController = map,
-      },
-    );
+    return FutureBuilder(
+        future: getEnteredLocations(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return MapmyIndiaMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(pickupLat ?? 0, pickupLong ?? 0),
+                zoom: 14.0,
+              ),
+              myLocationEnabled: true,
+              trackCameraPosition: true,
+              onMapCreated: (map) => {
+                mapController = map,
+              },
+            );
+          }
+          return CircularProgressIndicator();
+        });
   }
 }

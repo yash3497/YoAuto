@@ -10,6 +10,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:yoauto_task/screens/home/mainHome.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../constants/constant.dart';
+
 class PickupSearchDelegate extends SearchDelegate {
   static String? selectedValue;
 
@@ -17,8 +19,8 @@ class PickupSearchDelegate extends SearchDelegate {
     if (query.isNotEmpty) {
       String url =
           'https://atlas.mapmyindia.com/api/places/search/json?query=$query';
-      String accessToken = '7b882118-827e-4edb-ba1d-49b543207ab8';
-      Uri uri = Uri.parse('$url&access_token=$accessToken');
+
+      Uri uri = Uri.parse('$url&access_token=$mapMyIndiaSdkKey');
       http.Response response = await http.get(uri);
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
@@ -184,8 +186,8 @@ class DropSearchDelegate extends SearchDelegate {
     if (query.isNotEmpty) {
       String url =
           'https://atlas.mapmyindia.com/api/places/search/json?query=$query';
-      String accessToken = '7b882118-827e-4edb-ba1d-49b543207ab8';
-      Uri uri = Uri.parse('$url&access_token=$accessToken');
+
+      Uri uri = Uri.parse('$url&access_token=$mapMyIndiaSdkKey');
       http.Response response = await http.get(uri);
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);

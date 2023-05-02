@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -18,6 +20,9 @@ class LocationServices {
 
     Fluttertoast.showToast(
         msg: "Lattitude : " + "$lat" + "\nLongitude : " + "$lng");
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('pickupLat', lat);
+    prefs.setDouble('pickupLong', lng);
   }
 
   // Check if location service is enabled
